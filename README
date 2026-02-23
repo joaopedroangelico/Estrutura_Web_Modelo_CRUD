@@ -5,8 +5,8 @@ total; Funcionário é limitado a CRUD de veículos.
 
 Requisitos Funcionais (RF)
 [RF001] O sistema deve permitir login por CPF e senha, gerando token JWT com role (Funcionário ou Admin).
-[RF002] Funcionários podem cadastrar veículos (placa, cor, nome/CPF/telefone proprietário, status inicial "Em
-Andamento", observação).
+[RF002] Funcionários podem cadastrar veículos (placa, cor, status inicial "Em Andamento", observação).
+[RF002.2] Cadastro do nome/CPF/telefone proprietário.
 [RF003] Usuários autenticados visualizam lista de veículos cadastrados, filtrada por status ("Em Andamento", "Iniciado",
 "Finalizado").
 [RF004] Autenticados atualizam status de veículo para os 3 valores permitidos.
