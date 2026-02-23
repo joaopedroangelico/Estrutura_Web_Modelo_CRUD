@@ -22,12 +22,37 @@ Requisitos Não Funcionais (RNF)
 [RNF003] Persistência em MongoDB, com validações (CPF único, placa única, status enum).
 [RNF004] API RESTful com CORS, rate limiting e logs de erros.
 [RNF005] Performance: resposta < 200ms para CRUD, suporta 100 usuários simultâneos. [RNF006] Deploy simples
-    (Vercel/Netlify frontend, Render/Heroku backend). Tecnologias e Justificativas Tecnologia Justificativa Node.js +
-    Express Backend leve e rápido para API REST/CRUD; familiar ao seu background em Node/Electron. Fácil integração
-    JWT/auth . React + Vite + Tailwind CSS Frontend moderno para telas dinâmicas (homepage, forms, lista); responsivo e
-    rápido. Vite para build rápido . MongoDB + Mongoose NoSQL flexível para schemas veículos/usuários; ODM simplifica
-    validações/CRUD . JWT + bcrypt Autenticação stateless por token/role; bcrypt para senhas seguras. Axios Chamadas
-    HTTP frontend-backend seguras. Organização de Tarefas (para Duplas) 
+    (Vercel/Netlify frontend, Render/Heroku backend). 
+
+Tecnologias Utilizadas e Justificativas:
+-Backend
+Node.js + Express
+Backend leve e rápido para construção de API REST/CRUD.
+Alto desempenho para aplicações web.
+Familiar ao seu background em Node/Electron, facilitando o desenvolvimento.
+Integração simples com autenticação via JWT.
+
+-Frontend
+React + Vite + Tailwind CSS
+React: Interface moderna e dinâmica (homepage, formulários, listagens etc.).
+Vite: Build rápido e ambiente de desenvolvimento otimizado.
+Tailwind CSS: Estilização ágil e responsiva, facilitando a criação de layouts modernos.
+
+-Banco de Dados
+MongoDB + Mongoose
+MongoDB: Banco NoSQL flexível, ideal para schemas de veículos e usuários.
+Mongoose: ODM que simplifica modelagem, validações e operações CRUD.
+
+-Autenticação e Segurança
+JWT + bcrypt
+JWT: Autenticação stateless baseada em token e controle por roles.
+bcrypt: Criptografia segura de senhas.
+
+-Comunicação
+Axios
+Realiza chamadas HTTP seguras entre frontend e backend.
+Facilita requisições e tratamento de respostas da API.
+
 
 Tarefa 1: Setup backend (Express, MongoDB schemas para User/Veículo, rotas auth/CRUD sem middleware role) + RF001, RF002, RF005. 
 
