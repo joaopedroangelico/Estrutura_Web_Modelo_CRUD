@@ -21,8 +21,8 @@ Requisitos Não Funcionais (RNF)
 [RNF002] Autenticação segura com JWT, senhas criptografadas (bcrypt), expiração de token.
 [RNF003] Persistência em MongoDB, com validações (CPF único, placa única, status enum).
 [RNF004] API RESTful com CORS, rate limiting e logs de erros.
-[RNF005] Performance: resposta < 200ms para CRUD, suporta 100 usuários simultâneos. [RNF006] Deploy simples
-    (Vercel/Netlify frontend, Render/Heroku backend). 
+[RNF005] Performance: resposta < 200ms para CRUD, suporta 100 usuários simultâneos. 
+[RNF006] Deploy simples (Vercel/Netlify frontend, Render/Heroku backend). 
 
 Tecnologias Utilizadas e Justificativas:
 -Backend
