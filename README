@@ -6,15 +6,15 @@ total; Funcionário é limitado a CRUD de veículos.
 Requisitos Funcionais (RF)
 [RF001] O sistema deve permitir login por CPF e senha, gerando token JWT com role (Funcionário ou Admin).
 [RF002] Funcionários podem cadastrar veículos (placa, cor, status inicial "Em Andamento", observação).
-[RF002.2] Cadastro do nome/CPF/telefone proprietário.
-[RF003] Usuários autenticados visualizam lista de veículos cadastrados, filtrada por status ("Em Andamento", "Iniciado",
+[RF003] Cadastro do nome/CPF/telefone proprietário.
+[RF004] Usuários autenticados visualizam lista de veículos cadastrados, filtrada por status ("Em Andamento", "Iniciado",
 "Finalizado").
-[RF004] Autenticados atualizam status de veículo para os 3 valores permitidos.
-[RF005] Autenticados excluem veículos manualmente.
-[RF006] Admin cadastra/edita funcionários (CPF único, email, telefone, data nascimento, nome, endereço, ID auto-gerado,
+[RF005] Autenticados atualizam status de veículo para os 3 valores permitidos.
+[RF006] Autenticados excluem veículos manualmente.
+[RF007] Admin cadastra/edita funcionários (CPF único, email, telefone, data nascimento, nome, endereço, ID auto-gerado,
 checkbox para role Admin).
-[RF007] Homepage pública exibe visão geral (ex: stats de veículos por status) e botão de login.
-[RF008] Admin (ID 01 inicial) tem acesso irrestrito; Funcionário limitado a CRUD veículos.
+[RF008] Homepage pública exibe visão geral (ex: stats de veículos por status) e botão de login.
+[RF009] Admin (ID 01 inicial) tem acesso irrestrito; Funcionário limitado a CRUD veículos.
 
 Requisitos Não Funcionais (RNF)
 [RNF001] Interface responsiva e intuitiva (React/Tailwind), acessível em desktop/mobile.
@@ -27,10 +27,10 @@ Requisitos Não Funcionais (RNF)
 Tecnologias Utilizadas e Justificativas:
 -Backend
 Node.js + Express
-Backend leve e rápido para construção de API REST/CRUD.
-Alto desempenho para aplicações web.
-Familiar ao seu background em Node/Electron, facilitando o desenvolvimento.
-Integração simples com autenticação via JWT.
+-Backend leve e rápido para construção de API REST/CRUD.
+-Alto desempenho para aplicações web.
+-Familiar ao seu background em Node/Electron, facilitando o desenvolvimento.
+-Integração simples com autenticação via JWT.
 
 -Frontend
 React + Vite + Tailwind CSS
