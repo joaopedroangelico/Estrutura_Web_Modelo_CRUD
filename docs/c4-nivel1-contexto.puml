@@ -1,0 +1,23 @@
+@startuml Nivel1
+title C4 - Nível 1 (Contexto) | Sistema de Oficina Mecânica
+
+skinparam rectangle {
+  BackgroundColor #E3F2FD
+  BorderColor #1E88E5
+}
+
+skinparam actor {
+  BackgroundColor #FFF9C4
+  BorderColor #F9A825
+}
+
+actor "Funcionário" as Func
+actor "Administrador" as Admin
+
+rectangle "Sistema de Gerenciamento\nde Oficina Mecânica" as Sistema {
+}
+
+Func --> Sistema : Gerencia veículos\n(CRUD, status)
+Admin --> Sistema : Administra usuários\ne veículos
+
+@enduml
