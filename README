@@ -5,29 +5,54 @@ total; Funcionário é limitado a CRUD de veículos.
 
 Requisitos Funcionais (RF)
 [RF001] O sistema deve permitir login por CPF e senha, gerando token JWT com role (Funcionário ou Admin).
-[RF002] Funcionários podem cadastrar veículos (placa, cor, nome/CPF/telefone proprietário, status inicial "Em
-Andamento", observação).
-[RF003] Usuários autenticados visualizam lista de veículos cadastrados, filtrada por status ("Em Andamento", "Iniciado",
+[RF002] Funcionários podem cadastrar veículos (placa, cor, status inicial "Em Andamento", observação).
+[RF003] Cadastro do nome/CPF/telefone proprietário.
+[RF004] Usuários autenticados visualizam lista de veículos cadastrados, filtrada por status ("Em Andamento", "Iniciado",
 "Finalizado").
-[RF004] Autenticados atualizam status de veículo para os 3 valores permitidos.
-[RF005] Autenticados excluem veículos manualmente.
-[RF006] Admin cadastra/edita funcionários (CPF único, email, telefone, data nascimento, nome, endereço, ID auto-gerado,
+[RF005] Autenticados atualizam status de veículo para os 3 valores permitidos.
+[RF006] Autenticados excluem veículos manualmente.
+[RF007] Admin cadastra/edita funcionários (CPF único, email, telefone, data nascimento, nome, endereço, ID auto-gerado,
 checkbox para role Admin).
-[RF007] Homepage pública exibe visão geral (ex: stats de veículos por status) e botão de login.
-[RF008] Admin (ID 01 inicial) tem acesso irrestrito; Funcionário limitado a CRUD veículos.
+[RF008] Homepage pública exibe visão geral (ex: stats de veículos por status) e botão de login.
+[RF009] Admin (ID 01 inicial) tem acesso irrestrito; Funcionário limitado a CRUD veículos.
 
 Requisitos Não Funcionais (RNF)
 [RNF001] Interface responsiva e intuitiva (React/Tailwind), acessível em desktop/mobile.
 [RNF002] Autenticação segura com JWT, senhas criptografadas (bcrypt), expiração de token.
 [RNF003] Persistência em MongoDB, com validações (CPF único, placa única, status enum).
 [RNF004] API RESTful com CORS, rate limiting e logs de erros.
-[RNF005] Performance: resposta < 200ms para CRUD, suporta 100 usuários simultâneos. [RNF006] Deploy simples
-    (Vercel/Netlify frontend, Render/Heroku backend). Tecnologias e Justificativas Tecnologia Justificativa Node.js +
-    Express Backend leve e rápido para API REST/CRUD; familiar ao seu background em Node/Electron. Fácil integração
-    JWT/auth . React + Vite + Tailwind CSS Frontend moderno para telas dinâmicas (homepage, forms, lista); responsivo e
-    rápido. Vite para build rápido . MongoDB + Mongoose NoSQL flexível para schemas veículos/usuários; ODM simplifica
-    validações/CRUD . JWT + bcrypt Autenticação stateless por token/role; bcrypt para senhas seguras. Axios Chamadas
-    HTTP frontend-backend seguras. Organização de Tarefas (para Duplas) 
+[RNF005] Performance: resposta < 200ms para CRUD, suporta 100 usuários simultâneos. 
+[RNF006] Deploy simples (Vercel/Netlify frontend, Render/Heroku backend). 
+
+Tecnologias Utilizadas e Justificativas:
+-Backend
+Node.js + Express
+-Backend leve e rápido para construção de API REST/CRUD.
+-Alto desempenho para aplicações web.
+-Familiar ao seu background em Node/Electron, facilitando o desenvolvimento.
+-Integração simples com autenticação via JWT.
+
+-Frontend
+React + Vite + Tailwind CSS
+React: Interface moderna e dinâmica (homepage, formulários, listagens etc.).
+Vite: Build rápido e ambiente de desenvolvimento otimizado.
+Tailwind CSS: Estilização ágil e responsiva, facilitando a criação de layouts modernos.
+
+-Banco de Dados
+MongoDB + Mongoose
+MongoDB: Banco NoSQL flexível, ideal para schemas de veículos e usuários.
+Mongoose: ODM que simplifica modelagem, validações e operações CRUD.
+
+-Autenticação e Segurança
+JWT + bcrypt
+JWT: Autenticação stateless baseada em token e controle por roles.
+bcrypt: Criptografia segura de senhas.
+
+-Comunicação
+Axios
+Realiza chamadas HTTP seguras entre frontend e backend.
+Facilita requisições e tratamento de respostas da API.
+
 
 Tarefa 1: Setup backend (Express, MongoDB schemas para User/Veículo, rotas auth/CRUD sem middleware role) + RF001, RF002, RF005. 
 
@@ -35,6 +60,3 @@ Tarefa 2: Setup frontend (React homepage/login/forms lista) + integração Axios
 
 Tarefa 3: Middleware
     roles (RF004, RF006, RF008), testes + deploy. README com prints/screenshots.
-    Copie isso no README.md ou Wiki do repo novo. Para código inicial, crie repo "Mecanica-Moderno" , rode npx create-vite@latest frontend --template react e
-    npm init -y no backend. 
-    Próximo passo: quer código boilerplate das rotas ou schemas? 
