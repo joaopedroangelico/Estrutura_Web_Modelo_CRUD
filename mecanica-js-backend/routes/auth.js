@@ -1,40 +1,66 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const auth = require('../middlewares/auth');
 const router = express.Router();
 
-// Cria ID sequencial simples (use contador DB em prod)
-const getNextId = async () => {
-  const last = await User.findOne().sort({ idFuncionario: -1 });
-  return (last?.idFuncionario || 0) + 1;
+// Próximo ID funcionario (simples contador)
+const getNextIdFuncionario = async () => {
+  const count = await User.countDocuments();
+  return count + 1;
 };
 
-// Login
+// POST /api/auth/login
 router.post('/login', async (req, res) => {
-  const { cpf, senha } = req.body;
-  const user = await User.findOne({ cpf });
-  if (!user || !(await user.compareSenha(senha))) {
-    return res.status(400).json({ msg: 'Credenciais inválidas' });
+  try {
+    const { cpf, senha } = req.body;
+    const user = await User.findOne({ cpf });
+    if (!user || !(await user.compareSenha(senha))) {
+      return res.status(401).json({ erro: 'CPF ou senha inválidos' });
+    }
+    const token = jwt.sign(
+      { id: user._id, role: user.isAdmin ? 'admin' : 'funcionario' },
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+    res.json({
+      token,
+      user: { id: user._id, nome: user.nome, role: user.isAdmin ? 'admin' : 'funcionario' }
+    });
+  } catch (err) {
+    res.status(500).json({ erro: 'Erro servidor' });
   }
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-  res.json({ token, role: user.isAdmin ? 'admin' : 'funcionario' });
 });
 
-// CRUD Users (Admin only)
-router.post('/users', auth(['admin']), async (req, res) => {
-  req.body.idFuncionario = await getNextId();
-  const user = new User(req.body);
-  await user.save();
-  res.status(201).json(user);
+// POST /api/auth/register - Admin only (adicione middleware depois)
+router.post('/register', async (req, res) => {
+  try {
+    req.body.idFuncionario = await getNextIdFuncionario();
+    const user = new User(req.body);
+    await user.save();
+    res.status(201).json({ msg: 'Funcionário cadastrado', id: user.idFuncionario });
+  } catch (err) {
+    res.status(400).json({ erro: err.message });
+  }
 });
-// Adicione GET/PUT/DELETE similar, protegido admin
 
-// Seed Admin inicial (rode 1x)
-router.post('/seed-admin', async (req, res) => {
-  const admin = new User({ cpf: '12345678901', nome: 'Admin', senha: 'admin123', isAdmin: true, idFuncionario: 1 });
-  await admin.save();
-  res.json({ msg: 'Admin criado' });
+// Seed Admin inicial (rode POST /api/auth/seed uma vez)
+router.post('/seed', async (req, res) => {
+  try {
+    const adminExists = await User.findOne({ cpf: '00000000000' });
+    if (adminExists) return res.json({ msg: 'Admin já existe' });
+    const admin = new User({
+      cpf: '00000000000',
+      nome: 'Admin Inicial',
+      email: 'admin@mecanica.com',
+      senha: 'admin123',
+      isAdmin: true,
+      idFuncionario: 1
+    });
+    await admin.save();
+    res.json({ msg: 'Admin criado! Login: 00000000000 / admin123' });
+  } catch (err) {
+    res.status(500).json({ erro: err.message });
+  }
 });
 
 module.exports = router;

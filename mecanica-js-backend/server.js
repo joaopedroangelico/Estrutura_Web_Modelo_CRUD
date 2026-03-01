@@ -1,19 +1,23 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const authRoutes = require('./routes/auth');
-const veiculoRoutes = require('./routes/veiculos');
-require('dotenv').config();
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:5173' })); // Frontend Vite
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB conectado'))
-  .catch(err => console.log(err));
+  .catch(err => console.error('MongoDB erro:', err));
 
-app.use('/api/auth', authRoutes);
-app.use('/api/veiculos', veiculoRoutes);
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/veiculos', require('./routes/veiculos'));
+app.use('/api/users', require('./routes/users'));
 
-app.listen(process.env.PORT, () => console.log(`Server em ${process.env.PORT}`));
+app.get('/', (req, res) => res.send('API Mecânica OK!'));
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server: http://localhost:${PORT}`));
