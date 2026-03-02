@@ -1,23 +1,17 @@
 @startuml Nivel1
-title C4 - Nível 1 (Contexto) | Sistema de Oficina Mecânica
+!include https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Context.puml
 
-skinparam rectangle {
-  BackgroundColor #E3F2FD
-  BorderColor #1E88E5
-}
+title Diagrama de Contexto - Sistema de Gerenciamento de Oficina Mecânica
 
-skinparam actor {
-  BackgroundColor #FFF9C4
-  BorderColor #F9A825
-}
+Person(Funcionario, "Funcionário", "Funcionário da oficina mecânica responsável pelo cadastro e controle de veículos")
+Person(Admin, "Administrador", "Administrador do sistema com acesso total")
+Person(Cliente, "Cliente", "Solicitante do serviço e proprietário do veículo")
 
-actor "Funcionário" as Func
-actor "Administrador" as Admin
+System(Sistemaoficina, "Sistema de Gerenciamento de Oficina Mecânica", "Sistema web para controle de veículos em reparo, autenticação por CPF/senha e controle de acesso por perfis")
 
-rectangle "Sistema de Gerenciamento\nde Oficina Mecânica" as Sistema {
-}
+Rel(Funcionario, Sistemaoficina, "Gerencia veículos (cadastro, atualização de status, exclusão)", "Web")
+Rel(Admin, Sistemaoficina, "Administra usuários e veículos", "Web")
+Rel(Cliente, Sistemaoficina, "Fornece dados do cliente e do veículo e consulta status", "Web")
 
-Func --> Sistema : Gerencia veículos\n(CRUD, status)
-Admin --> Sistema : Administra usuários\ne veículos
-
+LAYOUT_WITH_LEGEND()
 @enduml

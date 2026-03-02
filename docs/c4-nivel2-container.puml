@@ -1,51 +1,23 @@
 @startuml Nivel2
-title C4 - Nível 2 (Contêineres) | Sistema de Oficina Mecânica
+!include https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
 
-skinparam rectangle {
-  BackgroundColor #E8F5E9
-  BorderColor #2E7D32
+title Diagrama de Contêineres - Sistema de Gerenciamento de Oficina Mecânica
+
+Person(Funcionario, "Funcionário", "Funcionário da oficina mecânica")
+Person(Admin, "Administrador", "Administrador do sistema")
+Person(Cliente, "Cliente", "Solicitante do serviço")
+
+System_Boundary(Sistemaoficina, "Sistema de Gerenciamento de Oficina Mecânica") {
+  Container(FrontendWeb, "Frontend Web", "React + Vite + Tailwind CSS", "Interface web para homepage, login e operações CRUD")
+  Container(BackendAPI, "Backend API", "Node.js + Express", "API REST responsável por autenticação, regras de negócio e controle de acesso")
+  ContainerDb(Database, "Banco de Dados", "MongoDB", "Armazena usuários, clientes e veículos")
 }
 
-skinparam database {
-  BackgroundColor #FFFDE7
-  BorderColor #F9A825
-}
+Rel(Cliente, FrontendWeb, "Consulta informações e status do veículo", "HTTPS")
+Rel(Funcionario, FrontendWeb, "Utiliza funcionalidades do sistema", "HTTPS")
+Rel(Admin, FrontendWeb, "Administra usuários e permissões", "HTTPS")
+Rel(FrontendWeb, BackendAPI, "Requisições REST", "JSON / HTTPS")
+Rel(BackendAPI, Database, "Persistência de dados", "Mongoose / TCP")
 
-skinparam actor {
-  BackgroundColor #E3F2FD
-  BorderColor #1E88E5
-}
-
-actor "Usuário Público" as Publico
-actor "Funcionário / Admin" as Usuario
-
-rectangle "Frontend Web\n(React + Vite + Tailwind)" as Frontend {
-  note right
-    Interface responsiva
-    Homepage pública
-    Login e CRUD
-  end note
-}
-
-rectangle "Backend API\n(Node.js + Express)" as Backend {
-  note right
-    API REST
-    JWT + Roles
-    Regras de negócio
-  end note
-}
-
-database "MongoDB" as DB {
-  note right
-    Usuários
-    Funcionários
-    Veículos
-  end note
-}
-
-Publico --> Frontend : Acessa homepage
-Usuario --> Frontend : Usa sistema autenticado
-Frontend --> Backend : HTTP / JSON
-Backend --> DB : CRUD / Persistência
-
+LAYOUT_WITH_LEGEND()
 @enduml
