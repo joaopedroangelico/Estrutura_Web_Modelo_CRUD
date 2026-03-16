@@ -1,62 +1,38 @@
-Domínio do Problema
-Sistema de gerenciamento de oficina mecânica para controle de veículos em reparo. Gerencia cadastros de funcionários
-(com roles), veículos (com status limitados) e operações CRUD protegidas por login via CPF/senha. Admin tem acesso
-total; Funcionário é limitado a CRUD de veículos.
+DOCUMENTACAO - MECANICA QUARKUS + MYSQL
 
-Requisitos Funcionais (RF)
-[RF001] O sistema deve permitir login por CPF e senha, gerando token JWT com role (Funcionário ou Admin).
-[RF002] Funcionários podem cadastrar veículos (placa, cor, status inicial "Em Andamento", observação).
-[RF003] Cadastro do nome/CPF/telefone proprietário.
-[RF004] Usuários autenticados visualizam lista de veículos cadastrados, filtrada por status ("Em Andamento", "Iniciado",
-"Finalizado").
-[RF005] Autenticados atualizam status de veículo para os 3 valores permitidos.
-[RF006] Autenticados excluem veículos manualmente.
-[RF007] Admin cadastra/edita funcionários (CPF único, email, telefone, data nascimento, nome, endereço, ID auto-gerado,
-checkbox para role Admin).
-[RF008] Homepage pública exibe visão geral (ex: stats de veículos por status) e botão de login.
-[RF009] Admin (ID 01 inicial) tem acesso irrestrito; Funcionário limitado a CRUD veículos.
+DOMINIO DO PROBLEMA
+Sistema oficina: CRUD veiculos/usuarios, login CPF/senha JWT, roles Funcionario/Admin
 
-Requisitos Não Funcionais (RNF)
-[RNF001] Interface responsiva e intuitiva (React/Tailwind), acessível em desktop/mobile.
-[RNF002] Autenticação segura com JWT, senhas criptografadas (bcrypt), expiração de token.
-[RNF003] Persistência em MongoDB, com validações (CPF único, placa única, status enum).
-[RNF004] API RESTful com CORS, rate limiting e logs de erros.
-[RNF005] Performance: resposta < 200ms para CRUD, suporta 100 usuários simultâneos. 
-[RNF006] Deploy simples (Vercel/Netlify frontend, Render/Heroku backend). 
+MOTIVO DA MUDANCA: JavaScript ficou confuso/complexo. Java/Quarkus alinha com 
+outros projetos pessoais, mantendo consistência mental do programador.
 
-Tecnologias Utilizadas e Justificativas:
--Backend
-Node.js + Express
--Backend leve e rápido para construção de API REST/CRUD.
--Alto desempenho para aplicações web.
--Familiar ao seu background em Node/Electron, facilitando o desenvolvimento.
--Integração simples com autenticação via JWT.
+REQUISITOS FUNCIONAIS (RF)
+RF001: Login JWT com role (funcionario/admin)
+RF002: Funcionario cadastra veiculos
+RF003: Lista veiculos por status
+RF004: Update status (Em Andamento/Iniciado/Finalizado)
+RF005: Delete veiculo
+RF006: Admin CRUD usuarios
+RF007: Homepage publica com stats
+RF008: RBAC diferenciado
 
--Frontend
-React + Vite + Tailwind CSS
-React: Interface moderna e dinâmica (homepage, formulários, listagens etc.).
-Vite: Build rápido e ambiente de desenvolvimento otimizado.
-Tailwind CSS: Estilização ágil e responsiva, facilitando a criação de layouts modernos.
+REQUISITOS NAO FUNCIONAIS (RNF)
+RNF001: Quarkus reativo <50ms response
+RNF002: MySQL Hibernate Panache ACID
+RNF003: JWT SmallRye @RolesAllowed nativo
+RNF004: Deploy Docker/K8s nativo
+RNF005: Logs estruturados ELK-ready
 
--Banco de Dados
-MongoDB + Mongoose
-MongoDB: Banco NoSQL flexível, ideal para schemas de veículos e usuários.
-Mongoose: ODM que simplifica modelagem, validações e operações CRUD.
+TECNOLOGIAS
+| Tecnologia              | Justificativa                      |
+|-------------------------|------------------------------------|
+| Quarkus 3.12+ (Java21)  | Cloud-native, hot-reload, JWT/RBAC |
+| Hibernate Panache+MySQL | ORM reativo, ACID transacoes       |
+| SmallRye JWT            | @RolesAllowed sem boilerplate      |
+| Maven                   | Deps automaticas                   |
+| React (frontend)        | SPA com Bearer token               |
 
--Autenticação e Segurança
-JWT + bcrypt
-JWT: Autenticação stateless baseada em token e controle por roles.
-bcrypt: Criptografia segura de senhas.
-
--Comunicação
-Axios
-Realiza chamadas HTTP seguras entre frontend e backend.
-Facilita requisições e tratamento de respostas da API.
-
-
-Tarefa 1: Setup backend (Express, MongoDB schemas para User/Veículo, rotas auth/CRUD sem middleware role) + RF001, RF002, RF005. 
-
-Tarefa 2: Setup frontend (React homepage/login/forms lista) + integração Axios + RF003, RF007. 
-
-Tarefa 3: Middleware
-    roles (RF004, RF006, RF008), testes + deploy. README com prints/screenshots.
+ORGANIZACAO TAREFAS (DUPLAS)
+T1 (Pessoa A): Entities User/Veiculo + repos Panache
+T2 (Pessoa B): JWT config + endpoints @RolesAllowed
+T3 (Ambos): Testes + MySQL Docker + deploy Fly.io
