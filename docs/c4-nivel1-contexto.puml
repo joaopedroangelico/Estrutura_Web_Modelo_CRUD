@@ -1,7 +1,7 @@
 @startuml Nivel1
 !include https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Context.puml
 
-title Diagrama de Contexto - Sistema de Gerenciamento de Oficina Mecânica
+title Contexto - Gerenciamento de Oficina Mecânica
 
 Person(Funcionario, "Funcionário", "Funcionário da oficina mecânica responsável pelo cadastro e controle de veículos")
 Person(Admin, "Administrador", "Administrador do sistema com acesso total")
