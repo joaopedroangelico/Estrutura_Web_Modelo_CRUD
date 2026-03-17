@@ -1,7 +1,7 @@
 @startuml Nivel2
 !include https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
 
-title Diagrama de Contêineres - Sistema de Gerenciamento de Oficina Mecânica
+title Contêineres - Gerenciamento de Oficina Mecânica
 
 Person(Funcionario, "Funcionário", "Funcionário da oficina mecânica")
 Person(Admin, "Administrador", "Administrador do sistema")
