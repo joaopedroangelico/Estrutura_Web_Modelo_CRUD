@@ -1,0 +1,58 @@
+@startuml Nivel3
+!include https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+title Componentes - Sistema de Gerenciamento de Oficina Mecânica
+
+'Atores
+Person(Funcionario, "Funcionário")
+Person(Admin, "Administrador")
+Person(Cliente, "Cliente")
+
+'Sistema
+System_Boundary(Sistemaoficina, "Sistema de Oficina") {
+
+  'Frontend
+  Container(FrontendWeb, "Frontend Web", "React", "Interface do usuário")
+
+  'Backend (Container que contém os componentes)
+  Container(BackendAPI, "Backend API", "Node.js / Quarkus", "API principal do sistema") {
+
+    Component(AuthComponent, "Auth Component", "JWT", "Autenticação e geração de tokens")
+
+    Component(UsuarioComponent, "Usuário Component", "Service", "Gerencia usuários e permissões")
+
+    Component(VeiculoComponent, "Veículo Component", "Service", "CRUD e status de veículos")
+
+    Component(ClienteComponent, "Cliente Component", "Service", "Gerenciamento de clientes")
+
+    Component(OrcamentoComponent, "Orçamento Component", "Service", "Serviços e cálculos")
+
+  }
+
+  'Banco
+  ContainerDb(Database, "Banco de Dados", "MySQL", "Persistência de dados")
+
+}
+
+'Relações
+Rel(Cliente, FrontendWeb, "Consulta dados", "HTTPS")
+Rel(Funcionario, FrontendWeb, "Usa sistema", "HTTPS")
+Rel(Admin, FrontendWeb, "Administra", "HTTPS")
+
+Rel(FrontendWeb, BackendAPI, "Requisições REST", "JSON")
+
+Rel(BackendAPI, AuthComponent, "Usa")
+Rel(BackendAPI, UsuarioComponent, "Usa")
+Rel(BackendAPI, VeiculoComponent, "Usa")
+Rel(BackendAPI, ClienteComponent, "Usa")
+Rel(BackendAPI, OrcamentoComponent, "Usa")
+
+Rel(AuthComponent, Database, "Valida")
+Rel(UsuarioComponent, Database, "CRUD")
+Rel(VeiculoComponent, Database, "CRUD")
+Rel(ClienteComponent, Database, "CRUD")
+Rel(OrcamentoComponent, Database, "CRUD")
+
+LAYOUT_WITH_LEGEND()
+
+@enduml

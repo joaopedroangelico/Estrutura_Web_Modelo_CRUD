@@ -36,3 +36,70 @@ ORGANIZACAO TAREFAS (DUPLAS)
 T1 (Pessoa A): Entities User/Veiculo + repos Panache
 T2 (Pessoa B): JWT config + endpoints @RolesAllowed
 T3 (Ambos): Testes + MySQL Docker + deploy Fly.io
+
+
+RELATÓRIO DO PROJETO: SISTEMA WEB CRUD MECÂNICA
+Data: 22/03/2026
+Status: Frontend em desenvolvimento (configuração ambiente)
+Desenvolvedor: PJ A (5º Semestre - Web Development)
+
+OBJETIVO FINAL
+Sistema web completo para oficina mecânica com operações CRUD (Create, Read, Update, Delete) para gerenciar:
+
+| Entidade   | Funcionalidades                       |
+| ---------- | ------------------------------------- |
+| Clientes   | Cadastro, consulta, edição, histórico |
+| Veículos   | Placa, modelo, ano, km atual          |
+| Serviços   | Orçamentos, peças, mão de obra        |
+| Orçamentos | Status, valores, aprovação            |
+
+
+ARQUITETURA ATUAL
+Estrutura_Web_Modelo_CRUD/
+├── mecanica-frontend/    ←  EM ANDAMENTO (Vite + React)
+│   ├── src/
+│   │   ├── Login.jsx     ← Tela inicial funcionando
+│   │   ├── Dashboard.jsx ← CRUD principal
+│   │   └── Services/     ← APIs backend
+│   └── package.json      ←  Configurar hoje
+└── mecanica-backend/     ←  Pendende (Node/Express)
+
+Frontend: React + Vite + React Router + Tailwind CSS
+Backend: Node.js + Express + PostgreSQL/MySQL
+Autenticação: JWT + Login/Logout
+
+
+ETAPAS CONCLUÍDAS
+1. Configuração ambiente Linux (Joinville PC1)
+2. Tela Login funcionando (npm run dev)
+3. Navegação protegida (Dashboard)
+4. Estrutura pastas React+Vite
+5. Configuração Windows (PC novo)
+
+
+ENTREGAS PRIORITÁRIAS (Próximos 7 dias)
+HOJE (22/03): npm install + Login rodando Windows
+23/03: CRUD Clientes (Listar + Cadastrar)
+24/03: Editar/Excluir Clientes
+25/03: CRUD Veículos + Relacionamento Cliente
+26/03: Orçamentos + Cálculos automáticos
+27/03: Autenticação JWT completa
+28/03: Deploy Frontend (Vercel/Netlify)
+
+
+ENTREGAS PRIORITÁRIAS (Próximos 7 dias)
+HOJE (22/03):  npm install + Login rodando Windows
+23/03: CRUD Clientes (Listar + Cadastrar)
+24/03:  Editar/Excluir Clientes
+25/03: CRUD Veículos + Relacionamento Cliente
+26/03: Orçamentos + Cálculos automáticos
+27/03: Autenticação JWT completa
+28/03: Deploy Frontend (Vercel/Netlify)
+
+
+CRONOGRAMA VISUAL
+Semana 1 [22-28/03] → Frontend 100% CRUD
+Semana 2 [29/03-04/04] → Backend API
+Semana 3 [05-11/04] → Banco + Integração
+Semana 4 [12-18/04] → Deploy + Testes
+Próximo passo AGORA: cd mecanica-frontend && npm install && npm run dev
