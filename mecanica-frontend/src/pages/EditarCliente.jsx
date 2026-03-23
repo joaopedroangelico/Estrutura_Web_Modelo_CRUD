@@ -9,7 +9,11 @@ function EditarCliente() {
     nome: '',
     cpf: '',
     telefone: '',
-    email: ''
+    email: '',
+    modelo: '',
+    placa: '',
+    cor: '',
+    descricao: ''
   })
   const [loading, setLoading] = useState(true)
 
@@ -19,7 +23,11 @@ function EditarCliente() {
         nome: 'João Silva',
         cpf: '123.456.789-00',
         telefone: '(11) 99999-9999',
-        email: 'joao@email.com'
+        email: 'joao@email.com',
+        modelo: 'Gol G5',
+        placa: 'ABC-1234',
+        cor: 'Prata',
+        descricao: 'Veículo em bom estado geral'
       })
       setLoading(false)
     }, 500)
@@ -35,7 +43,7 @@ function EditarCliente() {
   const handleSubmit = (e) => {
     e.preventDefault()
     setTimeout(() => {
-      alert('Cliente atualizado!')
+      alert('Cliente e veículo atualizados!')
       navigate('/dashboard')
     }, 500)
   }
@@ -58,6 +66,7 @@ function EditarCliente() {
           </h1>
 
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {/* DADOS DO CLIENTE */}
             <div>
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Nome Completo</label>
               <input
@@ -126,6 +135,93 @@ function EditarCliente() {
               </div>
             </div>
 
+            {/* DADOS DO VEÍCULO */}
+            <div style={{
+              background: '#f9fafb',
+              padding: '1.5rem',
+              borderRadius: '8px',
+              border: '1px solid #e5e7eb'
+            }}>
+              <h3 style={{
+                margin: '0 0 1rem 0',
+                fontSize: '1.2rem',
+                fontWeight: '600',
+                color: '#374151'
+              }}>
+                Dados do Veículo
+              </h3>
+
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+                <div style={{ flex: '1 1 200px' }}>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Modelo</label>
+                  <input
+                    name="modelo"
+                    value={formData.modelo}
+                    onChange={handleChange}
+                    placeholder="Gol G5"
+                    style={{
+                      width: '100%',
+                      padding: '12px',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '6px',
+                      fontSize: '1rem'
+                    }}
+                  />
+                </div>
+
+                <div style={{ flex: '0 0 120px' }}>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Placa</label>
+                  <input
+                    name="placa"
+                    value={formData.placa}
+                    onChange={handleChange}
+                    placeholder="ABC-1234"
+                    style={{
+                      width: '100%',
+                      padding: '12px',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '6px',
+                      fontSize: '1rem'
+                    }}
+                  />
+                </div>
+
+                <div style={{ flex: '1 1 150px' }}>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Cor</label>
+                  <input
+                    name="cor"
+                    value={formData.cor}
+                    onChange={handleChange}
+                    placeholder="Prata"
+                    style={{
+                      width: '100%',
+                      padding: '12px',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '6px',
+                      fontSize: '1rem'
+                    }}
+                  />
+                </div>
+
+                <div style={{ flex: 1 }}>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Descrição</label>
+                  <input
+                    name="descricao"
+                    value={formData.descricao}
+                    onChange={handleChange}
+                    placeholder="Alguma observação especial..."
+                    style={{
+                      width: '100%',
+                      padding: '12px',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '6px',
+                      fontSize: '1rem'
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+
             <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
               <button
                 type="submit"
@@ -140,7 +236,7 @@ function EditarCliente() {
                   cursor: 'pointer'
                 }}
               >
-                Atualizar Cliente
+                Atualizar Cliente + Veículo
               </button>
               <button
                 type="button"
