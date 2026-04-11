@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+const API_URL = 'http://localhost:3001'
+
 const pageStyle = {
   padding: '32px',
   maxWidth: '720px',
@@ -154,6 +156,7 @@ export default function CadastroVeiculos() {
   const [proprietario, setProprietario] = useState(PROPRIETARIO_INICIAL)
   const [sucesso, setSucesso] = useState(false)
   const [erros, setErros] = useState([])
+  const [loading, setLoading] = useState(false)
 
   const setV = (campo, valor) => setVeiculo((prev) => ({ ...prev, [campo]: valor }))
   const setP = (campo, valor) => setProprietario((prev) => ({ ...prev, [campo]: valor }))
@@ -167,7 +170,7 @@ export default function CadastroVeiculos() {
     return lista
   }
 
-  const handleSalvar = () => {
+  const handleSalvar = async () => {
     const lista = validar()
     if (lista.length > 0) {
       setErros(lista)
@@ -175,10 +178,22 @@ export default function CadastroVeiculos() {
       return
     }
     setErros([])
-    setSucesso(true)
-    // Aqui sera integrado com o backend
-    console.log('Nova OS:', { veiculo, proprietario })
-    setTimeout(() => navigate('/dashboard'), 1800)
+    setLoading(true)
+    try {
+      const res = await fetch(`${API_URL}/ordens`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ veiculo, proprietario }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.erro || 'Erro ao salvar ordem de servico.')
+      setSucesso(true)
+      setTimeout(() => navigate('/dashboard'), 1800)
+    } catch (err) {
+      setErros([err.message])
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -346,8 +361,8 @@ export default function CadastroVeiculos() {
         <button style={btnCancelarStyle} onClick={() => navigate('/dashboard')}>
           Cancelar
         </button>
-        <button style={btnSalvarStyle} onClick={handleSalvar}>
-          Salvar Ordem de Servico
+        <button style={{ ...btnSalvarStyle, opacity: loading ? 0.7 : 1 }} onClick={handleSalvar} disabled={loading}>
+          {loading ? 'Salvando...' : 'Salvar Ordem de Servico'}
         </button>
       </div>
     </div>

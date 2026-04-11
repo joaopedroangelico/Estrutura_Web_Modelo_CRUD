@@ -1,50 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const ORDENS = [
-  {
-    id: 'OS-001',
-    placa: 'ABC1234',
-    cliente: 'Joao Silva',
-    cpf: '123.456.789-00',
-    status: 'em andamento',
-    data: '30/03/2025',
-    valor: 380.0,
-    modelo: 'Honda Civic',
-    cor: 'Prata',
-    descricao: 'Troca de oleo e filtros',
-    telefone: '(41) 99999-0001',
-    email: 'joao@email.com',
-  },
-  {
-    id: 'OS-002',
-    placa: 'XYZ5678',
-    cliente: 'Maria Oliveira',
-    cpf: '987.654.321-00',
-    status: 'iniciado',
-    data: '29/03/2025',
-    valor: 1200.0,
-    modelo: 'Toyota Corolla',
-    cor: 'Branco',
-    descricao: 'Revisao completa e alinhamento',
-    telefone: '(41) 99999-0002',
-    email: 'maria@email.com',
-  },
-  {
-    id: 'OS-003',
-    placa: 'DEF9012',
-    cliente: 'Pedro Santos',
-    cpf: '111.222.333-44',
-    status: 'finalizado',
-    data: '28/03/2025',
-    valor: 250.0,
-    modelo: 'VW Gol',
-    cor: 'Vermelho',
-    descricao: 'Troca de pastilhas de freio',
-    telefone: '(41) 99999-0003',
-    email: 'pedro@email.com',
-  },
-]
+const API_URL = 'http://localhost:3001'
 
 const ABAS = ['em andamento', 'iniciado', 'finalizado']
 
@@ -105,8 +62,29 @@ export default function Dashboard() {
   const [abaAtiva, setAbaAtiva] = useState('em andamento')
   const [busca, setBusca] = useState('')
   const [detalheOS, setDetalheOS] = useState(null)
+  const [ordens, setOrdens] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [erro, setErro] = useState('')
 
-  const filtradas = ORDENS.filter((os) => {
+  useEffect(() => {
+    setLoading(true)
+    setErro('')
+    fetch(`${API_URL}/ordens`)
+      .then((res) => {
+        if (!res.ok) throw new Error('Erro ao buscar ordens.')
+        return res.json()
+      })
+      .then((data) => {
+        setOrdens(data)
+        setLoading(false)
+      })
+      .catch((err) => {
+        setErro(err.message)
+        setLoading(false)
+      })
+  }, [])
+
+  const filtradas = ordens.filter((os) => {
     const matchAba = os.status === abaAtiva
     const termo = busca.trim().toLowerCase()
     if (!termo) return matchAba
@@ -221,6 +199,20 @@ export default function Dashboard() {
         </button>
       </div>
 
+      {erro && (
+        <div style={{
+          backgroundColor: '#fee2e2',
+          border: '1px solid #fca5a5',
+          borderRadius: '8px',
+          padding: '12px 16px',
+          color: '#b91c1c',
+          fontSize: '14px',
+          marginBottom: '20px',
+        }}>
+          {erro}
+        </div>
+      )}
+
       {/* ABAS */}
       <div style={abasContainerStyle}>
         {ABAS.map((aba) => (
@@ -235,7 +227,7 @@ export default function Dashboard() {
               fontSize: '12px',
               fontWeight: '700',
             }}>
-              {ORDENS.filter(o => o.status === aba).length}
+              {ordens.filter(o => o.status === aba).length}
             </span>
           </button>
         ))}
@@ -251,14 +243,16 @@ export default function Dashboard() {
       />
 
       {/* LISTA DE CARDS */}
-      {filtradas.length === 0 ? (
+      {loading ? (
+        <div style={vazioStyle}>Carregando ordens...</div>
+      ) : filtradas.length === 0 ? (
         <div style={vazioStyle}>Nenhuma ordem encontrada.</div>
       ) : (
         filtradas.map((os) => (
-          <div key={os.id} style={cardStyle}>
+          <div key={os.codigo} style={cardStyle}>
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
-                <span style={{ fontWeight: '700', color: '#1e3a5f', fontSize: '15px' }}>{os.id}</span>
+                <span style={{ fontWeight: '700', color: '#1e3a5f', fontSize: '15px' }}>{os.codigo}</span>
                 <span style={{ fontWeight: '700', color: '#374151', fontSize: '15px' }}>{os.placa}</span>
                 <span style={statusBadge(os.status)}>{ABA_LABELS[os.status]}</span>
               </div>
@@ -268,13 +262,13 @@ export default function Dashboard() {
                 <span><strong style={{ color: '#374151' }}>Data:</strong> {os.data}</span>
                 <span><strong style={{ color: '#374151' }}>Valor:</strong>{' '}
                   <span style={{ color: '#10b981', fontWeight: '700' }}>
-                    R$ {os.valor.toFixed(2).replace('.', ',')}
+                    R$ {parseFloat(os.valor).toFixed(2).replace('.', ',')}
                   </span>
                 </span>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-              <button style={btnEditarStyle} onClick={() => navigate(`/editar/${os.id}`)}>
+              <button style={btnEditarStyle} onClick={() => navigate(`/editar/${os.codigo}`)}>
                 Editar
               </button>
               <button style={btnDetalhesStyle} onClick={() => setDetalheOS(os)}>
@@ -291,7 +285,7 @@ export default function Dashboard() {
           <div style={detalhesCardStyle} onClick={(e) => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
               <h2 style={{ margin: 0, fontSize: '18px', color: '#1e3a5f', fontWeight: '700' }}>
-                Detalhes — {detalheOS.id}
+                Detalhes — {detalheOS.codigo}
               </h2>
               <button
                 onClick={() => setDetalheOS(null)}
@@ -331,7 +325,7 @@ export default function Dashboard() {
             <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span style={{ fontSize: '14px', color: '#64748b' }}>Data: {detalheOS.data}</span>
               <span style={{ fontSize: '18px', fontWeight: '700', color: '#10b981' }}>
-                R$ {detalheOS.valor.toFixed(2).replace('.', ',')}
+                R$ {parseFloat(detalheOS.valor).toFixed(2).replace('.', ',')}
               </span>
             </div>
           </div>

@@ -1,50 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
-const ORDENS_MOCK = {
-  'OS-001': {
-    id: 'OS-001',
-    placa: 'ABC1234',
-    modelo: 'Honda Civic',
-    cor: 'Prata',
-    descricao: 'Troca de oleo e filtros',
-    status: 'em andamento',
-    valor: '380.00',
-    cpf: '123.456.789-00',
-    nome: 'Joao Silva',
-    telefone: '(41) 99999-0001',
-    email: 'joao@email.com',
-    data: '30/03/2025',
-  },
-  'OS-002': {
-    id: 'OS-002',
-    placa: 'XYZ5678',
-    modelo: 'Toyota Corolla',
-    cor: 'Branco',
-    descricao: 'Revisao completa e alinhamento',
-    status: 'iniciado',
-    valor: '1200.00',
-    cpf: '987.654.321-00',
-    nome: 'Maria Oliveira',
-    telefone: '(41) 99999-0002',
-    email: 'maria@email.com',
-    data: '29/03/2025',
-  },
-  'OS-003': {
-    id: 'OS-003',
-    placa: 'DEF9012',
-    modelo: 'VW Gol',
-    cor: 'Vermelho',
-    descricao: 'Troca de pastilhas de freio',
-    status: 'finalizado',
-    valor: '250.00',
-    cpf: '111.222.333-44',
-    nome: 'Pedro Santos',
-    telefone: '(41) 99999-0003',
-    email: 'pedro@email.com',
-    data: '28/03/2025',
-  },
-}
+const API_URL = 'http://localhost:3001'
 
 const pageStyle = {
   padding: '32px',
@@ -218,10 +175,36 @@ export default function EditarVeiculo() {
   const [sucesso, setSucesso] = useState(false)
   const [erros, setErros] = useState([])
   const [confirmarExclusao, setConfirmarExclusao] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [salvando, setSalvando] = useState(false)
 
   useEffect(() => {
-    const dados = ORDENS_MOCK[id]
-    if (dados) setForm({ ...dados })
+    setLoading(true)
+    fetch(`${API_URL}/ordens/${id}`)
+      .then((res) => {
+        if (!res.ok) throw new Error('Ordem nao encontrada.')
+        return res.json()
+      })
+      .then((data) => {
+        setForm({
+          id: data.codigo,
+          placa: data.placa,
+          modelo: data.modelo,
+          cor: data.cor,
+          descricao: data.descricao,
+          status: data.status,
+          valor: data.valor,
+          cpf: data.cpf,
+          nome: data.cliente,
+          telefone: data.telefone,
+          email: data.email,
+          data: data.data,
+        })
+        setLoading(false)
+      })
+      .catch(() => {
+        setLoading(false)
+      })
   }, [id])
 
   const setF = (campo, valor) => setForm((prev) => ({ ...prev, [campo]: valor }))
@@ -235,7 +218,7 @@ export default function EditarVeiculo() {
     return lista
   }
 
-  const handleSalvar = () => {
+  const handleSalvar = async () => {
     const lista = validar()
     if (lista.length > 0) {
       setErros(lista)
@@ -243,20 +226,61 @@ export default function EditarVeiculo() {
       return
     }
     setErros([])
-    setSucesso(true)
-    // Aqui sera integrado com o backend
-    console.log('OS atualizada:', form)
-    setTimeout(() => navigate('/dashboard'), 1800)
+    setSalvando(true)
+    try {
+      const res = await fetch(`${API_URL}/ordens/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          veiculo: {
+            placa: form.placa,
+            modelo: form.modelo,
+            cor: form.cor,
+            descricao: form.descricao,
+            status: form.status,
+            valor: form.valor,
+          },
+          proprietario: {
+            cpf: form.cpf,
+            nome: form.nome,
+            telefone: form.telefone,
+            email: form.email,
+          },
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.erro || 'Erro ao atualizar ordem de servico.')
+      setSucesso(true)
+      setTimeout(() => navigate('/dashboard'), 1800)
+    } catch (err) {
+      setErros([err.message])
+    } finally {
+      setSalvando(false)
+    }
   }
 
-  const handleExcluir = () => {
+  const handleExcluir = async () => {
     if (!confirmarExclusao) {
       setConfirmarExclusao(true)
       return
     }
-    // Aqui sera integrado com o backend
-    console.log('OS excluida:', id)
-    navigate('/dashboard')
+    try {
+      const res = await fetch(`${API_URL}/ordens/${id}`, { method: 'DELETE' })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.erro || 'Erro ao excluir ordem de servico.')
+      navigate('/dashboard')
+    } catch (err) {
+      setErros([err.message])
+      setConfirmarExclusao(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div style={pageStyle}>
+        <div style={naoEncontradoStyle}>Carregando...</div>
+      </div>
+    )
   }
 
   if (!form) {
@@ -430,8 +454,8 @@ export default function EditarVeiculo() {
         <button style={btnCancelarStyle} onClick={() => navigate('/dashboard')}>
           Cancelar
         </button>
-        <button style={btnSalvarStyle} onClick={handleSalvar}>
-          Salvar Alteracoes
+        <button style={{ ...btnSalvarStyle, opacity: salvando ? 0.7 : 1 }} onClick={handleSalvar} disabled={salvando}>
+          {salvando ? 'Salvando...' : 'Salvar Alteracoes'}
         </button>
       </div>
     </div>
