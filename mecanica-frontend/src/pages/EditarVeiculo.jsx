@@ -8,6 +8,7 @@ const pageStyle = {
   maxWidth: '720px',
   margin: '0 auto',
   fontFamily: 'system-ui, sans-serif',
+  paddingBottom: '80px',
 }
 
 const headerStyle = {
@@ -88,6 +89,13 @@ const inputStyle = {
   boxSizing: 'border-box',
 }
 
+const inputDisabledStyle = {
+  ...inputStyle,
+  color: '#64748b',
+  backgroundColor: '#f1f5f9',
+  cursor: 'not-allowed',
+}
+
 const textareaStyle = {
   ...inputStyle,
   resize: 'vertical',
@@ -161,6 +169,17 @@ const sucessoStyle = {
   fontWeight: '500',
 }
 
+const adminBadgeStyle = {
+  backgroundColor: '#fef3c7',
+  border: '1px solid #fcd34d',
+  borderRadius: '6px',
+  padding: '4px 10px',
+  color: '#92400e',
+  fontSize: '12px',
+  fontWeight: '600',
+  marginLeft: '8px',
+}
+
 const naoEncontradoStyle = {
   textAlign: 'center',
   padding: '64px 0',
@@ -171,18 +190,29 @@ const naoEncontradoStyle = {
 export default function EditarVeiculo() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const user = JSON.parse(localStorage.getItem('usuario_logado') || '{}')
+  const isAdmin = user.role === 'admin'
+
   const [form, setForm] = useState(null)
   const [sucesso, setSucesso] = useState(false)
   const [erros, setErros] = useState([])
   const [confirmarExclusao, setConfirmarExclusao] = useState(false)
   const [loading, setLoading] = useState(true)
   const [salvando, setSalvando] = useState(false)
+  const [mecanicos, setMecanicos] = useState([])
+
+  useEffect(() => {
+    fetch(`${API_URL}/funcionarios`)
+      .then((res) => res.json())
+      .then((data) => setMecanicos(data.filter((f) => f.funcao === 'mecanico')))
+      .catch(() => {})
+  }, [])
 
   useEffect(() => {
     setLoading(true)
     fetch(`${API_URL}/ordens/${id}`)
       .then((res) => {
-        if (!res.ok) throw new Error('Ordem nao encontrada.')
+        if (!res.ok) throw new Error('Não encontrada.')
         return res.json()
       })
       .then((data) => {
@@ -191,30 +221,31 @@ export default function EditarVeiculo() {
           placa: data.placa,
           modelo: data.modelo,
           cor: data.cor,
-          descricao: data.descricao,
+          descricao: data.descricao || '',
           status: data.status,
           valor: data.valor,
           cpf: data.cpf,
           nome: data.cliente,
-          telefone: data.telefone,
-          email: data.email,
+          telefone: data.telefone || '',
+          email: data.email || '',
           data: data.data,
+          atendente_id: data.atendente_id || null,
+          mecanico_id: data.mecanico_id || '',
+          atendente: data.atendente || '—',
         })
         setLoading(false)
       })
-      .catch(() => {
-        setLoading(false)
-      })
+      .catch(() => setLoading(false))
   }, [id])
 
   const setF = (campo, valor) => setForm((prev) => ({ ...prev, [campo]: valor }))
 
   const validar = () => {
     const lista = []
-    if (!form.placa.trim()) lista.push('Placa e obrigatoria.')
-    if (!form.modelo.trim()) lista.push('Modelo e obrigatorio.')
-    if (!form.cpf.trim()) lista.push('CPF e obrigatorio.')
-    if (!form.nome.trim()) lista.push('Nome do proprietario e obrigatorio.')
+    if (!form.placa.trim()) lista.push('Placa é obrigatória.')
+    if (!form.modelo.trim()) lista.push('Modelo é obrigatório.')
+    if (!form.cpf.trim()) lista.push('CPF é obrigatório.')
+    if (!form.nome.trim()) lista.push('Nome do proprietário é obrigatório.')
     return lista
   }
 
@@ -239,6 +270,8 @@ export default function EditarVeiculo() {
             descricao: form.descricao,
             status: form.status,
             valor: form.valor,
+            atendente_id: form.atendente_id || null,
+            mecanico_id: form.mecanico_id || null,
           },
           proprietario: {
             cpf: form.cpf,
@@ -249,7 +282,7 @@ export default function EditarVeiculo() {
         }),
       })
       const data = await res.json()
-      if (!res.ok) throw new Error(data.erro || 'Erro ao atualizar ordem de servico.')
+      if (!res.ok) throw new Error(data.erro || 'Erro ao atualizar.')
       setSucesso(true)
       setTimeout(() => navigate('/dashboard'), 1800)
     } catch (err) {
@@ -267,7 +300,7 @@ export default function EditarVeiculo() {
     try {
       const res = await fetch(`${API_URL}/ordens/${id}`, { method: 'DELETE' })
       const data = await res.json()
-      if (!res.ok) throw new Error(data.erro || 'Erro ao excluir ordem de servico.')
+      if (!res.ok) throw new Error(data.erro || 'Erro ao excluir.')
       navigate('/dashboard')
     } catch (err) {
       setErros([err.message])
@@ -276,19 +309,13 @@ export default function EditarVeiculo() {
   }
 
   if (loading) {
-    return (
-      <div style={pageStyle}>
-        <div style={naoEncontradoStyle}>Carregando...</div>
-      </div>
-    )
+    return <div style={pageStyle}><div style={naoEncontradoStyle}>Carregando...</div></div>
   }
 
   if (!form) {
     return (
       <div style={pageStyle}>
-        <div style={naoEncontradoStyle}>
-          Ordem de servico "{id}" nao encontrada.
-        </div>
+        <div style={naoEncontradoStyle}>Ordem de serviço "{id}" não encontrada.</div>
       </div>
     )
   }
@@ -296,166 +323,127 @@ export default function EditarVeiculo() {
   return (
     <div style={pageStyle}>
       <div style={headerStyle}>
-        <h1 style={tituloPaginaStyle}>Editar Ordem de Servico</h1>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <h1 style={tituloPaginaStyle}>Editar Ordem de Serviço</h1>
+          {!isAdmin && <span style={adminBadgeStyle}>Valor bloqueado — apenas admin</span>}
+        </div>
         <span style={idBadgeStyle}>{form.id}</span>
       </div>
 
-      {sucesso && (
-        <div style={sucessoStyle}>
-          Ordem de servico atualizada com sucesso! Redirecionando...
-        </div>
-      )}
-
-      {erros.length > 0 && (
-        <div style={alertaStyle}>
-          {erros.map((e, i) => <div key={i}>{e}</div>)}
-        </div>
-      )}
-
+      {sucesso && <div style={sucessoStyle}>Ordem de serviço atualizada com sucesso! Redirecionando...</div>}
+      {erros.length > 0 && <div style={alertaStyle}>{erros.map((e, i) => <div key={i}>{e}</div>)}</div>}
       {confirmarExclusao && (
         <div style={alertaStyle}>
-          <strong>Atencao:</strong> Esta acao nao pode ser desfeita. Clique em "Excluir" novamente para confirmar.
+          <strong>Atenção:</strong> Esta ação não pode ser desfeita. Clique em "Excluir" novamente para confirmar.
         </div>
       )}
 
-      {/* SECAO VEICULO */}
+      {/* VEÍCULO */}
       <div style={secaoStyle('#3b82f6')}>
-        <p style={secaoTituloStyle('#3b82f6')}>Dados do Veiculo</p>
+        <p style={secaoTituloStyle('#3b82f6')}>Dados do Veículo</p>
         <div style={gridStyle}>
           <div style={fieldStyle}>
             <label style={labelStyle}>Placa *</label>
-            <input
-              style={inputStyle}
-              type="text"
-              value={form.placa}
-              onChange={(e) => setF('placa', e.target.value.toUpperCase())}
-              maxLength={8}
-            />
+            <input style={inputStyle} type="text"
+              value={form.placa} onChange={(e) => setF('placa', e.target.value.toUpperCase())} maxLength={8} />
           </div>
-
           <div style={fieldStyle}>
             <label style={labelStyle}>Modelo</label>
-            <input
-              style={inputStyle}
-              type="text"
-              value={form.modelo}
-              onChange={(e) => setF('modelo', e.target.value)}
-            />
+            <input style={inputStyle} type="text"
+              value={form.modelo} onChange={(e) => setF('modelo', e.target.value)} />
           </div>
-
           <div style={fieldStyle}>
             <label style={labelStyle}>Cor</label>
-            <input
-              style={inputStyle}
-              type="text"
-              value={form.cor}
-              onChange={(e) => setF('cor', e.target.value)}
-            />
+            <input style={inputStyle} type="text"
+              value={form.cor} onChange={(e) => setF('cor', e.target.value)} />
           </div>
-
           <div style={fieldStyle}>
             <label style={labelStyle}>Status</label>
-            <select
-              style={selectStyle}
-              value={form.status}
-              onChange={(e) => setF('status', e.target.value)}
-            >
+            <select style={selectStyle} value={form.status} onChange={(e) => setF('status', e.target.value)}>
               <option value="iniciado">Iniciado</option>
               <option value="em andamento">Em Andamento</option>
               <option value="finalizado">Finalizado</option>
             </select>
           </div>
-
           <div style={fieldStyle}>
             <label style={labelStyle}>Valor (R$)</label>
             <input
-              style={inputStyle}
-              type="number"
-              min="0"
-              step="0.01"
+              style={isAdmin ? inputStyle : inputDisabledStyle}
+              type="number" min="0" step="0.01"
               value={form.valor}
-              onChange={(e) => setF('valor', e.target.value)}
+              onChange={(e) => isAdmin && setF('valor', e.target.value)}
+              disabled={!isAdmin}
             />
           </div>
-
           <div style={fieldStyle}>
-            <label style={labelStyle}>Data</label>
-            <input
-              style={{ ...inputStyle, color: '#64748b' }}
-              type="text"
-              value={form.data}
-              disabled
-            />
+            <label style={labelStyle}>Data de Abertura</label>
+            <input style={inputDisabledStyle} type="text" value={form.data} disabled />
           </div>
-
           <div style={fieldFullStyle}>
-            <label style={labelStyle}>Descricao do Servico</label>
-            <textarea
-              style={textareaStyle}
-              value={form.descricao}
-              onChange={(e) => setF('descricao', e.target.value)}
-            />
+            <label style={labelStyle}>Descrição do Serviço</label>
+            <textarea style={textareaStyle}
+              value={form.descricao} onChange={(e) => setF('descricao', e.target.value)} />
           </div>
         </div>
       </div>
 
-      {/* SECAO PROPRIETARIO */}
+      {/* PROPRIETÁRIO */}
       <div style={secaoStyle('#10b981')}>
-        <p style={secaoTituloStyle('#10b981')}>Dados do Proprietario</p>
+        <p style={secaoTituloStyle('#10b981')}>Dados do Proprietário</p>
         <div style={gridStyle}>
           <div style={fieldStyle}>
             <label style={labelStyle}>CPF *</label>
-            <input
-              style={inputStyle}
-              type="text"
-              value={form.cpf}
-              onChange={(e) => setF('cpf', e.target.value)}
-              maxLength={14}
-            />
+            <input style={inputStyle} type="text"
+              value={form.cpf} onChange={(e) => setF('cpf', e.target.value)} maxLength={14} />
           </div>
-
           <div style={fieldStyle}>
             <label style={labelStyle}>Nome Completo *</label>
-            <input
-              style={inputStyle}
-              type="text"
-              value={form.nome}
-              onChange={(e) => setF('nome', e.target.value)}
-            />
+            <input style={inputStyle} type="text"
+              value={form.nome} onChange={(e) => setF('nome', e.target.value)} />
           </div>
-
           <div style={fieldStyle}>
             <label style={labelStyle}>Telefone</label>
-            <input
-              style={inputStyle}
-              type="text"
-              value={form.telefone}
-              onChange={(e) => setF('telefone', e.target.value)}
-              maxLength={15}
-            />
+            <input style={inputStyle} type="text"
+              value={form.telefone} onChange={(e) => setF('telefone', e.target.value)} maxLength={15} />
           </div>
-
           <div style={fieldStyle}>
-            <label style={labelStyle}>Email</label>
-            <input
-              style={inputStyle}
-              type="email"
-              value={form.email}
-              onChange={(e) => setF('email', e.target.value)}
-            />
+            <label style={labelStyle}>E-mail</label>
+            <input style={inputStyle} type="email"
+              value={form.email} onChange={(e) => setF('email', e.target.value)} />
+          </div>
+        </div>
+      </div>
+
+      {/* RESPONSÁVEIS */}
+      <div style={secaoStyle('#f59e0b')}>
+        <p style={secaoTituloStyle('#f59e0b')}>Responsáveis</p>
+        <div style={gridStyle}>
+          <div style={fieldStyle}>
+            <label style={labelStyle}>Atendente</label>
+            <input style={inputDisabledStyle} type="text" value={form.atendente} disabled />
+          </div>
+          <div style={fieldStyle}>
+            <label style={labelStyle}>Mecânico Responsável</label>
+            <select style={selectStyle} value={form.mecanico_id || ''}
+              onChange={(e) => setF('mecanico_id', e.target.value || null)}>
+              <option value="">— Selecionar mecânico —</option>
+              {mecanicos.map((m) => (
+                <option key={m.id} value={m.id}>{m.nome}</option>
+              ))}
+            </select>
           </div>
         </div>
       </div>
 
       <div style={acoesStyle}>
-        <button style={btnExcluirStyle} onClick={handleExcluir}>
-          {confirmarExclusao ? 'Confirmar Exclusao' : 'Excluir OS'}
-        </button>
-        <button style={btnCancelarStyle} onClick={() => navigate('/dashboard')}>
-          Cancelar
-        </button>
+        {isAdmin && (
+          <button style={btnExcluirStyle} onClick={handleExcluir}>
+            {confirmarExclusao ? 'Confirmar Exclusão' : 'Excluir OS'}
+          </button>
+        )}
+        <button style={btnCancelarStyle} onClick={() => navigate('/dashboard')}>Cancelar</button>
         <button style={{ ...btnSalvarStyle, opacity: salvando ? 0.7 : 1 }} onClick={handleSalvar} disabled={salvando}>
-          {salvando ? 'Salvando...' : 'Salvar Alteracoes'}
+          {salvando ? 'Salvando...' : 'Salvar Alterações'}
         </button>
       </div>
     </div>

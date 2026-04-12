@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const API_URL = 'http://localhost:3001'
@@ -8,6 +8,7 @@ const pageStyle = {
   maxWidth: '720px',
   margin: '0 auto',
   fontFamily: 'system-ui, sans-serif',
+  paddingBottom: '80px',
 }
 
 const tituloPaginaStyle = {
@@ -70,6 +71,13 @@ const inputStyle = {
   outline: 'none',
   width: '100%',
   boxSizing: 'border-box',
+}
+
+const inputReadOnlyStyle = {
+  ...inputStyle,
+  color: '#64748b',
+  backgroundColor: '#f1f5f9',
+  cursor: 'default',
 }
 
 const textareaStyle = {
@@ -141,6 +149,8 @@ const VEICULO_INICIAL = {
   descricao: '',
   status: 'iniciado',
   valor: '',
+  atendente_id: null,
+  mecanico_id: '',
 }
 
 const PROPRIETARIO_INICIAL = {
@@ -152,21 +162,31 @@ const PROPRIETARIO_INICIAL = {
 
 export default function CadastroVeiculos() {
   const navigate = useNavigate()
-  const [veiculo, setVeiculo] = useState(VEICULO_INICIAL)
+  const user = JSON.parse(localStorage.getItem('usuario_logado') || '{}')
+
+  const [veiculo, setVeiculo] = useState({ ...VEICULO_INICIAL, atendente_id: user.id || null })
   const [proprietario, setProprietario] = useState(PROPRIETARIO_INICIAL)
   const [sucesso, setSucesso] = useState(false)
   const [erros, setErros] = useState([])
   const [loading, setLoading] = useState(false)
+  const [mecanicos, setMecanicos] = useState([])
+
+  useEffect(() => {
+    fetch(`${API_URL}/funcionarios`)
+      .then((res) => res.json())
+      .then((data) => setMecanicos(data.filter((f) => f.funcao === 'mecanico')))
+      .catch(() => {})
+  }, [])
 
   const setV = (campo, valor) => setVeiculo((prev) => ({ ...prev, [campo]: valor }))
   const setP = (campo, valor) => setProprietario((prev) => ({ ...prev, [campo]: valor }))
 
   const validar = () => {
     const lista = []
-    if (!veiculo.placa.trim()) lista.push('Placa e obrigatoria.')
-    if (!veiculo.modelo.trim()) lista.push('Modelo e obrigatorio.')
-    if (!proprietario.cpf.trim()) lista.push('CPF e obrigatorio.')
-    if (!proprietario.nome.trim()) lista.push('Nome do proprietario e obrigatorio.')
+    if (!veiculo.placa.trim()) lista.push('Placa é obrigatória.')
+    if (!veiculo.modelo.trim()) lista.push('Modelo é obrigatório.')
+    if (!proprietario.cpf.trim()) lista.push('CPF é obrigatório.')
+    if (!proprietario.nome.trim()) lista.push('Nome do proprietário é obrigatório.')
     return lista
   }
 
@@ -186,7 +206,7 @@ export default function CadastroVeiculos() {
         body: JSON.stringify({ veiculo, proprietario }),
       })
       const data = await res.json()
-      if (!res.ok) throw new Error(data.erro || 'Erro ao salvar ordem de servico.')
+      if (!res.ok) throw new Error(data.erro || 'Erro ao salvar ordem de serviço.')
       setSucesso(true)
       setTimeout(() => navigate('/dashboard'), 1800)
     } catch (err) {
@@ -199,170 +219,111 @@ export default function CadastroVeiculos() {
   return (
     <div style={pageStyle}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '28px' }}>
-        <h1 style={{ ...tituloPaginaStyle, margin: 0 }}>Nova Ordem de Servico</h1>
-        <button
-          style={{
-            backgroundColor: '#f1f5f9',
-            color: '#475569',
-            border: '1px solid #d1d5db',
-            borderRadius: '8px',
-            padding: '10px 20px',
-            fontSize: '14px',
-            fontWeight: '600',
-            cursor: 'pointer',
-          }}
-          onClick={() => navigate('/dashboard')}
-        >
+        <h1 style={{ ...tituloPaginaStyle, margin: 0 }}>Nova Ordem de Serviço</h1>
+        <button style={btnCancelarStyle} onClick={() => navigate('/dashboard')}>
           Voltar ao Dashboard
         </button>
       </div>
 
       {sucesso && (
-        <div style={sucessoStyle}>
-          Ordem de servico cadastrada com sucesso! Redirecionando...
-        </div>
+        <div style={sucessoStyle}>Ordem de serviço cadastrada com sucesso! Redirecionando...</div>
       )}
-
       {erros.length > 0 && (
-        <div style={erroStyle}>
-          {erros.map((e, i) => <div key={i}>{e}</div>)}
-        </div>
+        <div style={erroStyle}>{erros.map((e, i) => <div key={i}>{e}</div>)}</div>
       )}
 
-      {/* SECAO VEICULO */}
+      {/* VEÍCULO */}
       <div style={secaoStyle('#3b82f6')}>
-        <p style={secaoTituloStyle('#3b82f6')}>Dados do Veiculo</p>
+        <p style={secaoTituloStyle('#3b82f6')}>Dados do Veículo</p>
         <div style={gridStyle}>
           <div style={fieldStyle}>
             <label style={labelStyle}>Placa *</label>
-            <input
-              style={inputStyle}
-              type="text"
-              placeholder="Ex: ABC1234"
-              value={veiculo.placa}
-              onChange={(e) => setV('placa', e.target.value.toUpperCase())}
-              maxLength={8}
-            />
+            <input style={inputStyle} type="text" placeholder="Ex: ABC1234"
+              value={veiculo.placa} onChange={(e) => setV('placa', e.target.value.toUpperCase())} maxLength={8} />
           </div>
-
           <div style={fieldStyle}>
-            <label style={labelStyle}>Modelo</label>
-            <input
-              style={inputStyle}
-              type="text"
-              placeholder="Ex: Honda Civic"
-              value={veiculo.modelo}
-              onChange={(e) => setV('modelo', e.target.value)}
-            />
+            <label style={labelStyle}>Modelo *</label>
+            <input style={inputStyle} type="text" placeholder="Ex: Honda Civic"
+              value={veiculo.modelo} onChange={(e) => setV('modelo', e.target.value)} />
           </div>
-
           <div style={fieldStyle}>
             <label style={labelStyle}>Cor</label>
-            <input
-              style={inputStyle}
-              type="text"
-              placeholder="Ex: Prata"
-              value={veiculo.cor}
-              onChange={(e) => setV('cor', e.target.value)}
-            />
+            <input style={inputStyle} type="text" placeholder="Ex: Prata"
+              value={veiculo.cor} onChange={(e) => setV('cor', e.target.value)} />
           </div>
-
           <div style={fieldStyle}>
             <label style={labelStyle}>Status Inicial</label>
-            <select
-              style={selectStyle}
-              value={veiculo.status}
-              onChange={(e) => setV('status', e.target.value)}
-            >
+            <select style={selectStyle} value={veiculo.status} onChange={(e) => setV('status', e.target.value)}>
               <option value="iniciado">Iniciado</option>
               <option value="em andamento">Em Andamento</option>
               <option value="finalizado">Finalizado</option>
             </select>
           </div>
-
           <div style={fieldStyle}>
             <label style={labelStyle}>Valor Estimado (R$)</label>
-            <input
-              style={inputStyle}
-              type="number"
-              placeholder="0.00"
-              min="0"
-              step="0.01"
-              value={veiculo.valor}
-              onChange={(e) => setV('valor', e.target.value)}
-            />
+            <input style={inputStyle} type="number" placeholder="0.00" min="0" step="0.01"
+              value={veiculo.valor} onChange={(e) => setV('valor', e.target.value)} />
           </div>
-
           <div style={fieldFullStyle}>
-            <label style={labelStyle}>Descricao do Servico</label>
-            <textarea
-              style={textareaStyle}
-              placeholder="Descreva o servico a ser realizado..."
-              value={veiculo.descricao}
-              onChange={(e) => setV('descricao', e.target.value)}
-            />
+            <label style={labelStyle}>Descrição do Serviço</label>
+            <textarea style={textareaStyle} placeholder="Descreva o serviço a ser realizado..."
+              value={veiculo.descricao} onChange={(e) => setV('descricao', e.target.value)} />
           </div>
         </div>
       </div>
 
-      {/* SECAO PROPRIETARIO */}
+      {/* PROPRIETÁRIO */}
       <div style={secaoStyle('#10b981')}>
-        <p style={secaoTituloStyle('#10b981')}>Dados do Proprietario</p>
+        <p style={secaoTituloStyle('#10b981')}>Dados do Proprietário</p>
         <div style={gridStyle}>
           <div style={fieldStyle}>
             <label style={labelStyle}>CPF *</label>
-            <input
-              style={inputStyle}
-              type="text"
-              placeholder="000.000.000-00"
-              value={proprietario.cpf}
-              onChange={(e) => setP('cpf', e.target.value)}
-              maxLength={14}
-            />
+            <input style={inputStyle} type="text" placeholder="000.000.000-00"
+              value={proprietario.cpf} onChange={(e) => setP('cpf', e.target.value)} maxLength={14} />
           </div>
-
           <div style={fieldStyle}>
             <label style={labelStyle}>Nome Completo *</label>
-            <input
-              style={inputStyle}
-              type="text"
-              placeholder="Nome do proprietario"
-              value={proprietario.nome}
-              onChange={(e) => setP('nome', e.target.value)}
-            />
+            <input style={inputStyle} type="text" placeholder="Nome do proprietário"
+              value={proprietario.nome} onChange={(e) => setP('nome', e.target.value)} />
           </div>
-
           <div style={fieldStyle}>
             <label style={labelStyle}>Telefone</label>
-            <input
-              style={inputStyle}
-              type="text"
-              placeholder="(00) 00000-0000"
-              value={proprietario.telefone}
-              onChange={(e) => setP('telefone', e.target.value)}
-              maxLength={15}
-            />
+            <input style={inputStyle} type="text" placeholder="(00) 00000-0000"
+              value={proprietario.telefone} onChange={(e) => setP('telefone', e.target.value)} maxLength={15} />
           </div>
-
           <div style={fieldStyle}>
-            <label style={labelStyle}>Email</label>
-            <input
-              style={inputStyle}
-              type="email"
-              placeholder="email@exemplo.com"
-              value={proprietario.email}
-              onChange={(e) => setP('email', e.target.value)}
-            />
+            <label style={labelStyle}>E-mail</label>
+            <input style={inputStyle} type="email" placeholder="email@exemplo.com"
+              value={proprietario.email} onChange={(e) => setP('email', e.target.value)} />
+          </div>
+        </div>
+      </div>
+
+      {/* RESPONSÁVEIS */}
+      <div style={secaoStyle('#f59e0b')}>
+        <p style={secaoTituloStyle('#f59e0b')}>Responsáveis</p>
+        <div style={gridStyle}>
+          <div style={fieldStyle}>
+            <label style={labelStyle}>Atendente</label>
+            <input style={inputReadOnlyStyle} type="text" value={user.nome || '—'} readOnly />
+          </div>
+          <div style={fieldStyle}>
+            <label style={labelStyle}>Mecânico Responsável</label>
+            <select style={selectStyle} value={veiculo.mecanico_id}
+              onChange={(e) => setV('mecanico_id', e.target.value || null)}>
+              <option value="">— Selecionar mecânico —</option>
+              {mecanicos.map((m) => (
+                <option key={m.id} value={m.id}>{m.nome}</option>
+              ))}
+            </select>
           </div>
         </div>
       </div>
 
       <div style={acoesStyle}>
-        <button style={btnCancelarStyle} onClick={() => navigate('/dashboard')}>
-          Cancelar
-        </button>
+        <button style={btnCancelarStyle} onClick={() => navigate('/dashboard')}>Cancelar</button>
         <button style={{ ...btnSalvarStyle, opacity: loading ? 0.7 : 1 }} onClick={handleSalvar} disabled={loading}>
-          {loading ? 'Salvando...' : 'Salvar Ordem de Servico'}
+          {loading ? 'Salvando...' : 'Salvar Ordem de Serviço'}
         </button>
       </div>
     </div>

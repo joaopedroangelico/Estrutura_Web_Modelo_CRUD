@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+const API_URL = 'http://localhost:3001'
+
 const pageStyle = {
   minHeight: '100vh',
   backgroundColor: '#f1f5f9',
@@ -91,17 +93,32 @@ export default function Login() {
   const [usuario, setUsuario] = useState('')
   const [senha, setSenha] = useState('')
   const [erro, setErro] = useState('')
+  const [loading, setLoading] = useState(false)
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!usuario.trim() || !senha.trim()) {
-      setErro('Preencha usuario e senha.')
+      setErro('Preencha usuário e senha.')
       return
     }
-    if (usuario === 'admin' && senha === '1234') {
-      setErro('')
+    setLoading(true)
+    setErro('')
+    try {
+      const res = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usuario, senha }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setErro(data.erro || 'Usuário ou senha inválidos.')
+        return
+      }
+      localStorage.setItem('usuario_logado', JSON.stringify(data))
       navigate('/dashboard')
-    } else {
-      setErro('Usuario ou senha invalidos.')
+    } catch {
+      setErro('Erro de conexão com o servidor. Verifique se o backend está rodando.')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -113,18 +130,18 @@ export default function Login() {
     <div style={pageStyle}>
       <div style={cardStyle}>
         <div style={headerStyle}>
-          <h1 style={titleStyle}>Oficina Mecanica</h1>
-          <p style={subtitleStyle}>Sistema de Gestao de Servicos</p>
+          <h1 style={titleStyle}>Oficina Mecânica</h1>
+          <p style={subtitleStyle}>Sistema de Gestão de Serviços</p>
         </div>
 
         {erro && <div style={errorStyle}>{erro}</div>}
 
         <div style={fieldStyle}>
-          <label style={labelStyle}>Usuario</label>
+          <label style={labelStyle}>Usuário</label>
           <input
             style={inputStyle}
             type="text"
-            placeholder="Digite seu usuario"
+            placeholder="Digite seu usuário"
             value={usuario}
             onChange={(e) => setUsuario(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -143,12 +160,12 @@ export default function Login() {
           />
         </div>
 
-        <button style={btnStyle} onClick={handleLogin}>
-          Entrar
+        <button style={{ ...btnStyle, opacity: loading ? 0.7 : 1 }} onClick={handleLogin} disabled={loading}>
+          {loading ? 'Entrando...' : 'Entrar'}
         </button>
 
         <p style={{ textAlign: 'center', fontSize: '12px', color: '#94a3b8', marginTop: '20px', marginBottom: 0 }}>
-          Credenciais de teste: admin / 1234
+          Admin: admin / 1234 &nbsp;|&nbsp; Mecânico: carlos / 1234
         </p>
       </div>
     </div>
