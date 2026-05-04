@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const morgan = require('morgan')
 require('dotenv').config()
 
 const pool = require('./db')
@@ -7,6 +8,16 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
+app.use(morgan('dev'))
+
+app.get('/health', async (req, res) => {
+  try {
+    await pool.query('SELECT 1')
+    res.json({ status: 'ok', banco: 'conectado', timestamp: new Date().toISOString() })
+  } catch (err) {
+    res.status(503).json({ status: 'erro', banco: 'desconectado', timestamp: new Date().toISOString() })
+  }
+})
 
 // =============================================
 // UTILITÁRIO: gera próximo código OS-XXX
