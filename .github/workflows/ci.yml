@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  testes-backend:
+    name: Testes Unitários (Backend)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: mecanica-backend/package-lock.json
+      - name: Instalar dependências
+        run: npm install
+        working-directory: mecanica-backend
+      - name: Rodar testes
+        run: npm test
+        working-directory: mecanica-backend
+
+  build-frontend:
+    name: Build do Frontend
+    runs-on: ubuntu-latest
+    needs: testes-backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: mecanica-frontend/package-lock.json
+      - name: Instalar dependências
+        run: npm install
+        working-directory: mecanica-frontend
+      - name: Build
+        run: npm run build
+        working-directory: mecanica-frontend
