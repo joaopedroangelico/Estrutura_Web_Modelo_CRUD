@@ -217,8 +217,14 @@ export default function Funcionarios() {
             </div>
 
             {msgModal && (
-              <div style={{ backgroundColor: '#fee2e2', border: '1px solid #fca5a5', borderRadius: '8px',
-                padding: '10px 14px', color: '#b91c1c', fontSize: '13px', marginBottom: '16px' }}>{msgModal}</div>
+              <div style={{
+                backgroundColor: '#fee2e2', border: '1px solid #fca5a5', borderRadius: '8px',
+                padding: '12px 16px', color: '#b91c1c', fontSize: '13px', marginBottom: '16px',
+                display: 'flex', flexDirection: 'column', gap: '4px',
+              }}>
+                <span style={{ fontWeight: '700' }}>Não foi possível salvar</span>
+                <span>{msgModal}</span>
+              </div>
             )}
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>

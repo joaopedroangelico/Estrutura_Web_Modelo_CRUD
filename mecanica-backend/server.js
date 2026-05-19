@@ -98,6 +98,9 @@ app.post('/funcionarios', async (req, res) => {
 app.put('/funcionarios/:id', async (req, res) => {
     try {
         const { nome, funcao, role, senha, cpf, telefone, endereco } = req.body
+        if (!nome || !funcao || !role) {
+            return res.status(400).json({ erro: 'Nome, função e nível de acesso são obrigatórios.' })
+        }
         if (senha) {
             await pool.query(
                 'UPDATE funcionarios SET nome=$1, funcao=$2, role=$3, senha=$4, cpf=$5, telefone=$6, endereco=$7 WHERE id=$8',
@@ -111,8 +114,11 @@ app.put('/funcionarios/:id', async (req, res) => {
         }
         res.json({ mensagem: 'Funcionário atualizado com sucesso.' })
     } catch (err) {
+        if (err.code === '23505') {
+            return res.status(400).json({ erro: 'Este CPF já está cadastrado para outro funcionário.' })
+        }
         console.error(err)
-        res.status(500).json({ erro: 'Erro ao atualizar funcionário.' })
+        res.status(500).json({ erro: 'Erro ao atualizar funcionário. Verifique os dados e tente novamente.' })
     }
 })
 
