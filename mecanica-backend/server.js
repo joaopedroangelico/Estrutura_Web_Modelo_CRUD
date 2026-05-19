@@ -77,18 +77,18 @@ app.get('/funcionarios', async (req, res) => {
 
 app.post('/funcionarios', async (req, res) => {
     try {
-        const { nome, usuario, senha, funcao, role } = req.body
+        const { nome, usuario, senha, funcao, role, cpf, telefone, endereco } = req.body
         if (!nome || !usuario || !senha || !funcao) {
             return res.status(400).json({ erro: 'Nome, usuário, senha e função são obrigatórios.' })
         }
         const result = await pool.query(
-            'INSERT INTO funcionarios (nome, usuario, senha, funcao, role) VALUES ($1, $2, $3, $4, $5) RETURNING id',
-            [nome, usuario, senha, funcao, role || 'funcionario']
+            'INSERT INTO funcionarios (nome, usuario, senha, funcao, role, cpf, telefone, endereco) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id',
+            [nome, usuario, senha, funcao, role || 'funcionario', cpf || null, telefone || null, endereco || null]
         )
         res.status(201).json({ mensagem: 'Funcionário cadastrado com sucesso.', id: result.rows[0].id })
     } catch (err) {
         if (err.code === '23505') {
-            return res.status(400).json({ erro: 'Usuário já existe.' })
+            return res.status(400).json({ erro: 'Usuário ou CPF já cadastrado.' })
         }
         console.error(err)
         res.status(500).json({ erro: 'Erro ao cadastrar funcionário.' })
@@ -97,16 +97,16 @@ app.post('/funcionarios', async (req, res) => {
 
 app.put('/funcionarios/:id', async (req, res) => {
     try {
-        const { nome, funcao, role, senha } = req.body
+        const { nome, funcao, role, senha, cpf, telefone, endereco } = req.body
         if (senha) {
             await pool.query(
-                'UPDATE funcionarios SET nome=$1, funcao=$2, role=$3, senha=$4 WHERE id=$5',
-                [nome, funcao, role, senha, req.params.id]
+                'UPDATE funcionarios SET nome=$1, funcao=$2, role=$3, senha=$4, cpf=$5, telefone=$6, endereco=$7 WHERE id=$8',
+                [nome, funcao, role, senha, cpf || null, telefone || null, endereco || null, req.params.id]
             )
         } else {
             await pool.query(
-                'UPDATE funcionarios SET nome=$1, funcao=$2, role=$3 WHERE id=$4',
-                [nome, funcao, role, req.params.id]
+                'UPDATE funcionarios SET nome=$1, funcao=$2, role=$3, cpf=$4, telefone=$5, endereco=$6 WHERE id=$7',
+                [nome, funcao, role, cpf || null, telefone || null, endereco || null, req.params.id]
             )
         }
         res.json({ mensagem: 'Funcionário atualizado com sucesso.' })

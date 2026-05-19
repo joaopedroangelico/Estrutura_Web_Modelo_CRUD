@@ -30,8 +30,15 @@ CREATE TABLE IF NOT EXISTS funcionarios (
   senha     VARCHAR(255) NOT NULL,
   funcao    VARCHAR(50)  NOT NULL,
   role      VARCHAR(20)  NOT NULL DEFAULT 'funcionario',
+  cpf       VARCHAR(14)  UNIQUE,
+  telefone  VARCHAR(15),
+  endereco  VARCHAR(200),
   criado_em TIMESTAMP DEFAULT NOW()
 );
+
+ALTER TABLE funcionarios ADD COLUMN IF NOT EXISTS cpf      VARCHAR(14) UNIQUE;
+ALTER TABLE funcionarios ADD COLUMN IF NOT EXISTS telefone VARCHAR(15);
+ALTER TABLE funcionarios ADD COLUMN IF NOT EXISTS endereco VARCHAR(200);
 
 -- Tabela de ordens de serviço
 CREATE TABLE IF NOT EXISTS ordens_servico (

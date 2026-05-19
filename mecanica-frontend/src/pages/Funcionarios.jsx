@@ -71,7 +71,7 @@ export default function Funcionarios() {
   const [loading, setLoading] = useState(true)
   const [erro, setErro] = useState('')
   const [modal, setModal] = useState(null) // null | 'novo' | { ...funcionario }
-  const [form, setForm] = useState({ nome: '', usuario: '', senha: '', funcao: 'atendente', role: 'funcionario' })
+  const [form, setForm] = useState({ nome: '', usuario: '', senha: '', funcao: 'atendente', role: 'funcionario', cpf: '', telefone: '', endereco: '' })
   const [salvando, setSalvando] = useState(false)
   const [msgModal, setMsgModal] = useState('')
 
@@ -86,13 +86,13 @@ export default function Funcionarios() {
   useEffect(() => { carregar() }, [])
 
   const abrirNovo = () => {
-    setForm({ nome: '', usuario: '', senha: '', funcao: 'atendente', role: 'funcionario' })
+    setForm({ nome: '', usuario: '', senha: '', funcao: 'atendente', role: 'funcionario', cpf: '', telefone: '', endereco: '' })
     setMsgModal('')
     setModal('novo')
   }
 
   const abrirEditar = (f) => {
-    setForm({ nome: f.nome, usuario: f.usuario, senha: '', funcao: f.funcao, role: f.role, id: f.id })
+    setForm({ nome: f.nome, usuario: f.usuario, senha: '', funcao: f.funcao, role: f.role, id: f.id, cpf: f.cpf || '', telefone: f.telefone || '', endereco: f.endereco || '' })
     setMsgModal('')
     setModal('editar')
   }
@@ -172,8 +172,11 @@ export default function Funcionarios() {
                 <Badge texto={f.funcao} cores={FUNCAO_CORES} />
                 <Badge texto={f.role} cores={ROLE_CORES} />
               </div>
-              <div style={{ fontSize: '13px', color: '#64748b', display: 'flex', gap: '20px' }}>
+              <div style={{ fontSize: '13px', color: '#64748b', display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
                 <span><strong style={{ color: '#374151' }}>Usuário:</strong> {f.usuario}</span>
+                {f.cpf && <span><strong style={{ color: '#374151' }}>CPF:</strong> {f.cpf}</span>}
+                {f.telefone && <span><strong style={{ color: '#374151' }}>Tel:</strong> {f.telefone}</span>}
+                {f.endereco && <span><strong style={{ color: '#374151' }}>End:</strong> {f.endereco}</span>}
                 <span><strong style={{ color: '#374151' }}>Desde:</strong> {f.criado_em}</span>
               </div>
             </div>
@@ -234,6 +237,21 @@ export default function Funcionarios() {
                 <input style={inputStyle} type="password" value={form.senha}
                   onChange={(e) => setForm({ ...form, senha: e.target.value })}
                   placeholder={modal === 'editar' ? 'Deixe em branco para manter' : ''} />
+              </div>
+              <div>
+                <label style={labelStyle}>CPF</label>
+                <input style={inputStyle} value={form.cpf} placeholder="000.000.000-00"
+                  onChange={(e) => setForm({ ...form, cpf: e.target.value })} />
+              </div>
+              <div>
+                <label style={labelStyle}>Telefone</label>
+                <input style={inputStyle} value={form.telefone} placeholder="(00) 00000-0000"
+                  onChange={(e) => setForm({ ...form, telefone: e.target.value })} />
+              </div>
+              <div style={{ gridColumn: '1 / -1' }}>
+                <label style={labelStyle}>Endereço</label>
+                <input style={inputStyle} value={form.endereco} placeholder="Rua, número, bairro, cidade"
+                  onChange={(e) => setForm({ ...form, endereco: e.target.value })} />
               </div>
               <div>
                 <label style={labelStyle}>Função *</label>
