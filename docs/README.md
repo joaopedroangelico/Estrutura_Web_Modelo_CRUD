@@ -1,196 +1,216 @@
 # Sistema de Gestão de Oficina Mecânica
 
-Sistema web CRUD para gerenciamento de ordens de serviço de uma oficina mecânica.
+Sistema web para gerenciamento de ordens de serviço, funcionários, peças e serviços de uma oficina mecânica.
+
+---
+
+## Acesso ao sistema
+
+| Ambiente | Endereço |
+|---|---|
+| Sistema (frontend) | https://mecanica-frontend-ten.vercel.app |
+| API (backend) | https://mecanica-backend-juut.onrender.com |
+| Verificar saúde | https://mecanica-backend-juut.onrender.com/health |
+
+**Credenciais de teste:**
+
+| Usuário | Senha | Nível |
+|---|---|---|
+| admin | 1234 | Administrador |
+| carlos | 1234 | Funcionário (mecânico) |
+| ana | 1234 | Funcionário (atendente) |
 
 ---
 
 ## Tecnologias
 
-| Camada | Tecnologia |
-|--------|-----------|
-| Frontend | React 18 + Vite + React Router v6 |
-| Backend | Node.js + Express |
-| Banco de Dados | PostgreSQL |
-| Comunicação | REST API + fetch |
+| Parte | Tecnologia | Onde roda |
+|---|---|---|
+| Telas | React 18 + Vite | Vercel |
+| Servidor | Node.js + Express | Render |
+| Banco de dados | PostgreSQL | Neon (nuvem) |
+| Testes | Jest | GitHub Actions |
 
 ---
 
 ## Funcionalidades
 
-- Login com autenticação por usuário e senha
-- Listagem de ordens de serviço com filtro por status e busca por placa/CPF
-- Cadastro de nova ordem de serviço (com veículo e proprietário)
-- Edição de ordem de serviço existente
-- Exclusão de ordem de serviço
-- Modal de detalhes completos da OS
+**Ordens de Serviço**
+- Listar todas as OS com filtro por status e busca por placa ou CPF
+- Criar nova OS vinculando veículo e proprietário
+- Editar descrição, status, valor, atendente e mecânico responsável
+- Excluir OS (somente administrador)
+
+**Funcionários**
+- Cadastrar com nome, usuário, senha, CPF, telefone, endereço e função
+- Editar dados e nível de acesso
+- Excluir (somente administrador)
+
+**Itens e Serviços**
+- Cadastrar peças/materiais com nome, descrição e preço
+- Cadastrar serviços do catálogo com nome, descrição e preço
+- Editar e excluir (somente administrador)
+
+**Controle de acesso**
+- Administrador: acesso completo
+- Funcionário: visualização e criação de OS, sem exclusão e sem edição de valores
 
 ---
 
-## Estrutura do Projeto
+## Estrutura do projeto
 
 ```
 Estrutura_Web_Modelo_CRUD/
+├── .github/workflows/
+│   └── ci.yml                  # Pipeline de CI/CD automático
 ├── mecanica-backend/
-│   ├── server.js        # API REST (Express)
-│   ├── db.js            # Conexão com PostgreSQL
-│   ├── schema.sql       # Criação das tabelas e dados de exemplo
-│   ├── .env             # Configuração do banco (não versionado)
+│   ├── server.js               # Rotas da API
+│   ├── db.js                   # Conexão com o banco
+│   ├── schema.sql              # Criação das tabelas e dados de exemplo
+│   ├── validacoes.js           # Regras de validação
+│   ├── validacoes.test.js      # Testes unitários (27 testes)
 │   └── package.json
 ├── mecanica-frontend/
 │   ├── src/
-│   │   ├── App.jsx               # Roteamento e navbar
-│   │   ├── main.jsx              # Ponto de entrada
+│   │   ├── App.jsx             # Navegação e barra superior
 │   │   └── pages/
-│   │       ├── Login.jsx         # Tela de login
-│   │       ├── Dashboard.jsx     # Lista de ordens de serviço
-│   │       ├── CadastroVeiculos.jsx  # Nova OS
-│   │       └── EditarVeiculo.jsx     # Editar/excluir OS
+│   │       ├── Login.jsx
+│   │       ├── Dashboard.jsx
+│   │       ├── CadastroVeiculos.jsx
+│   │       ├── EditarVeiculo.jsx
+│   │       ├── Funcionarios.jsx
+│   │       ├── Itens.jsx
+│   │       └── Servicos.jsx
 │   └── package.json
-├── docs/                # Diagramas C4
-├── package.json         # Script para rodar tudo junto
-└── README.md
+├── docs/
+│   ├── README.md               # Este arquivo
+│   ├── visao-geral.md          # Explicação do sistema em linguagem simples
+│   └── *.puml                  # Diagramas de arquitetura (C4)
+├── render.yaml                 # Configuração de deploy do backend
+├── vercel.json                 # Configuração de deploy do frontend
+└── package.json                # Script para rodar tudo localmente
 ```
 
 ---
 
-## Banco de Dados
+## Banco de dados
 
-### Tabelas
+**funcionarios** — equipe da oficina
+| Coluna | Descrição |
+|---|---|
+| nome, usuario, senha | Dados de acesso |
+| funcao | atendente, mecanico, gerente ou outro |
+| role | admin ou funcionario |
+| cpf, telefone, endereco | Dados pessoais |
 
-**proprietarios**
-| Coluna | Tipo | Descrição |
-|--------|------|-----------|
-| id | SERIAL | Chave primária |
-| cpf | VARCHAR(14) | CPF único |
-| nome | VARCHAR(100) | Nome completo |
-| telefone | VARCHAR(15) | Telefone |
-| email | VARCHAR(100) | E-mail |
+**proprietarios** — clientes
+| Coluna | Descrição |
+|---|---|
+| cpf | Identificador único do cliente |
+| nome, telefone, email | Dados de contato |
 
-**veiculos**
-| Coluna | Tipo | Descrição |
-|--------|------|-----------|
-| id | SERIAL | Chave primária |
-| placa | VARCHAR(8) | Placa única |
-| modelo | VARCHAR(80) | Modelo do veículo |
-| cor | VARCHAR(40) | Cor |
-| proprietario_id | INTEGER | FK para proprietarios |
+**veiculos** — carros cadastrados
+| Coluna | Descrição |
+|---|---|
+| placa | Identificador único do veículo |
+| modelo, cor | Descrição do veículo |
+| proprietario_id | Vínculo com o cliente |
 
-**ordens_servico**
-| Coluna | Tipo | Descrição |
-|--------|------|-----------|
-| id | SERIAL | Chave primária |
-| codigo | VARCHAR(10) | Código único (ex: OS-001) |
-| veiculo_id | INTEGER | FK para veiculos |
-| descricao | TEXT | Descrição do serviço |
-| status | VARCHAR(20) | iniciado / em andamento / finalizado |
-| valor | NUMERIC(10,2) | Valor do serviço |
-| criado_em | TIMESTAMP | Data de abertura |
-| atualizado_em | TIMESTAMP | Última atualização |
+**ordens_servico** — serviços realizados
+| Coluna | Descrição |
+|---|---|
+| codigo | Número único (OS-001, OS-002...) |
+| descricao, status, valor | Detalhes do serviço |
+| atendente_id, mecanico_id | Responsáveis pelo atendimento |
+
+**itens** — peças e materiais
+| Coluna | Descrição |
+|---|---|
+| nome, descricao, preco | Dados da peça |
+
+**servicos_catalogo** — serviços com preço fixo
+| Coluna | Descrição |
+|---|---|
+| nome, descricao, preco | Dados do serviço |
 
 ---
 
-## API — Endpoints
+## API — principais rotas
 
-Base URL: `http://localhost:3001`
+Base URL em produção: `https://mecanica-backend-juut.onrender.com`
 
 | Método | Rota | Descrição |
-|--------|------|-----------|
-| GET | `/ordens` | Lista todas as OS (aceita `?status=` e `?busca=`) |
-| GET | `/ordens/:codigo` | Busca uma OS pelo código (ex: OS-001) |
-| POST | `/ordens` | Cria nova OS com veículo e proprietário |
-| PUT | `/ordens/:codigo` | Atualiza uma OS existente |
-| DELETE | `/ordens/:codigo` | Exclui uma OS |
-
-### Exemplo — POST /ordens
-
-```json
-{
-  "veiculo": {
-    "placa": "ABC1234",
-    "modelo": "Honda Civic",
-    "cor": "Prata",
-    "descricao": "Troca de óleo",
-    "status": "iniciado",
-    "valor": 380.00
-  },
-  "proprietario": {
-    "cpf": "123.456.789-00",
-    "nome": "João Silva",
-    "telefone": "(41) 99999-0001",
-    "email": "joao@email.com"
-  }
-}
-```
+|---|---|---|
+| POST | `/auth/login` | Autenticação |
+| GET | `/ordens` | Lista todas as OS |
+| POST | `/ordens` | Cria nova OS |
+| PUT | `/ordens/:codigo` | Atualiza OS |
+| DELETE | `/ordens/:codigo` | Exclui OS |
+| GET/POST/PUT/DELETE | `/funcionarios` | Gerencia funcionários |
+| GET/POST/PUT/DELETE | `/itens` | Gerencia itens |
+| GET/POST/PUT/DELETE | `/servicos-catalogo` | Gerencia catálogo |
+| GET | `/health` | Verifica status do servidor |
 
 ---
 
-## Como Rodar
+## Como rodar localmente
 
-### Pré-requisitos
+**Pré-requisitos:** Node.js 18+
 
-- [Node.js](https://nodejs.org) 18+
-- [PostgreSQL](https://postgresql.org/download/windows) 16+
-
-### 1. Configurar o banco de dados
-
-Abra o pgAdmin, crie um banco chamado `oficina_mecanica` e execute o arquivo `mecanica-backend/schema.sql` pelo Query Tool.
-
-### 2. Configurar o arquivo `.env`
-
-Edite o arquivo `mecanica-backend/.env`:
-
-```env
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=oficina_mecanica
-DB_USER=postgres
-DB_PASSWORD=sua_senha
-PORT=3001
-```
-
-### 3. Instalar dependências (primeira vez)
-
-Na raiz do projeto:
-
+**1. Instalar dependências**
 ```bash
 npm install
 npm install --prefix mecanica-backend
 npm install --prefix mecanica-frontend
 ```
 
-### 4. Iniciar o sistema
+**2. Configurar o banco**
 
+Edite `mecanica-backend/.env` escolhendo banco local ou Neon:
+
+```env
+# Nuvem (Neon)
+DATABASE_URL=postgresql://usuario:senha@host/neondb?sslmode=require
+
+# Local (PostgreSQL instalado na máquina)
+# DB_HOST=localhost
+# DB_USER=postgres
+# DB_PASSWORD=sua_senha
+# DB_NAME=oficina_mecanica
+
+PORT=3001
+```
+
+**3. Iniciar**
 ```bash
 npm start
 ```
 
-Isso inicia o backend e o frontend simultaneamente.
-
-| Serviço | URL |
-|---------|-----|
-| Frontend | http://localhost:5173 |
-| Backend (API) | http://localhost:3001 |
-
-### Credenciais de acesso
-
-| Usuário | Senha |
-|---------|-------|
-| admin | 1234 |
+| Serviço | Endereço local |
+|---|---|
+| Sistema | http://localhost:5173 |
+| API | http://localhost:3001 |
 
 ---
 
-## Diagramas
+## Testes
 
-Os diagramas de arquitetura no padrão C4 estão na pasta `docs/`:
+```bash
+cd mecanica-backend
+npm test
+```
 
-- `c4-nivel1-contexto.puml` — Contexto do sistema
-- `c4-nivel2-container.puml` — Containers
-- `c4-nivel3-componente.puml` — Componentes
-- `c4-nivel4-codigo.puml` — Código
+27 testes cobrindo validações de placa, CPF, status, preço, veículo, proprietário e funcionário.
 
 ---
 
-## Autor
+## CI/CD
 
-Desenvolvido por **João Pedro Angelico** — 5º Semestre, Desenvolvimento Web  
-Católica SC — 2025/2026
+A cada push na branch `main` o GitHub Actions executa automaticamente:
+1. Roda os 27 testes unitários
+2. Faz o build do frontend
+3. Se tudo passar, o Render e o Vercel publicam a nova versão automaticamente
+
+---
+
+*Desenvolvido por João Pedro Angelico — 5º Semestre, Desenvolvimento Web — Católica SC*
