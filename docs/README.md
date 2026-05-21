@@ -213,4 +213,13 @@ A cada push na branch `main` o GitHub Actions executa automaticamente:
 
 ---
 
+Atualizações futuras: 
+- Agenda para clientes;
+- Campos "A pagar" e "A cobrar";
+- Atualizar os campos UI/UX;
+- Validar os campos (CPFs, Código);
+- Adicionar campos adequados para o cadastro de itens;
+- Gerar PDF do serviços;
+- Descolorir o sistema para algo mais "pé no chão";
+
 *Desenvolvido por João Pedro Angelico — 5º Semestre, Desenvolvimento Web — Católica SC*
