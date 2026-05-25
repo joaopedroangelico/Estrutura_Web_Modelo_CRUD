@@ -8,59 +8,58 @@ import Itens from './pages/Itens'
 import Servicos from './pages/Servicos'
 
 const navbarStyle = {
-  backgroundColor: '#1e40af',
+  backgroundColor: '#1f1f1f',
   padding: '0 32px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  height: '60px',
-  boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
+  height: '48px',
+  boxShadow: '0 1px 4px rgba(0,0,0,0.5)',
+  fontFamily: "'Segoe UI', system-ui, sans-serif",
 }
 
 const navBrandStyle = {
   color: '#ffffff',
-  fontWeight: '700',
-  fontSize: '18px',
+  fontWeight: '600',
+  fontSize: '15px',
   textDecoration: 'none',
-  letterSpacing: '0.5px',
 }
 
 const navLinksStyle = {
   display: 'flex',
   alignItems: 'center',
-  gap: '8px',
+  gap: '2px',
 }
 
 const navLinkStyle = {
-  color: '#bfdbfe',
+  color: '#a0a0a0',
   textDecoration: 'none',
-  padding: '6px 14px',
-  borderRadius: '6px',
-  fontSize: '14px',
-  fontWeight: '500',
-  transition: 'background 0.15s',
+  padding: '5px 12px',
+  borderRadius: '2px',
+  fontSize: '13px',
+  fontWeight: '400',
 }
 
 const navLinkActiveStyle = {
   ...navLinkStyle,
-  backgroundColor: '#2563eb',
+  backgroundColor: '#0078d4',
   color: '#ffffff',
 }
 
 const sairBtnStyle = {
-  backgroundColor: '#ef4444',
+  backgroundColor: '#d13438',
   color: '#ffffff',
   border: 'none',
-  padding: '6px 16px',
-  borderRadius: '6px',
-  fontSize: '14px',
+  padding: '5px 14px',
+  borderRadius: '2px',
+  fontSize: '13px',
   fontWeight: '600',
   cursor: 'pointer',
   marginLeft: '8px',
 }
 
 const usuarioTagStyle = {
-  color: '#bfdbfe',
+  color: '#a0a0a0',
   fontSize: '13px',
   marginRight: '4px',
 }
@@ -80,7 +79,7 @@ function Navbar() {
   return (
     <nav style={navbarStyle}>
       <Link to="/dashboard" style={navBrandStyle}>
-        Mecânica
+        Oficina Mecanica
       </Link>
       <div style={navLinksStyle}>
         <Link to="/dashboard" style={isActive('/dashboard') ? navLinkActiveStyle : navLinkStyle}>
@@ -110,15 +109,15 @@ function BotoesFlutantes() {
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
-    padding: '10px 18px',
-    borderRadius: '10px',
-    border: 'none',
+    padding: '8px 16px',
+    borderRadius: '2px',
+    border: '1px solid rgba(255,255,255,0.15)',
     fontSize: '13px',
     fontWeight: '600',
     cursor: 'pointer',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.15)',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
     whiteSpace: 'nowrap',
-    transition: 'opacity 0.15s',
+    fontFamily: "'Segoe UI', system-ui, sans-serif",
   }
 
   const isActive = (path) => location.pathname === path
@@ -130,26 +129,26 @@ function BotoesFlutantes() {
       right: '24px',
       display: 'flex',
       flexDirection: 'column',
-      gap: '10px',
+      gap: '8px',
       zIndex: 200,
     }}>
       <button
-        style={{ ...btnBase, backgroundColor: isActive('/funcionarios') ? '#1d4ed8' : '#3b82f6', color: '#fff' }}
+        style={{ ...btnBase, backgroundColor: isActive('/funcionarios') ? '#005a9e' : '#0078d4', color: '#fff' }}
         onClick={() => navigate('/funcionarios')}
       >
-        👷 Funcionários
+        Funcionarios
       </button>
       <button
-        style={{ ...btnBase, backgroundColor: isActive('/itens') ? '#0f766e' : '#0d9488', color: '#fff' }}
+        style={{ ...btnBase, backgroundColor: isActive('/itens') ? '#0e6b0e' : '#107c10', color: '#fff' }}
         onClick={() => navigate('/itens')}
       >
-        🔩 Itens
+        Itens
       </button>
       <button
-        style={{ ...btnBase, backgroundColor: isActive('/servicos') ? '#7c3aed' : '#8b5cf6', color: '#fff' }}
+        style={{ ...btnBase, backgroundColor: isActive('/servicos') ? '#005a9e' : '#0078d4', color: '#fff' }}
         onClick={() => navigate('/servicos')}
       >
-        📋 Serviços
+        Servicos
       </button>
     </div>
   )
@@ -160,7 +159,7 @@ function Layout({ children }) {
   const isLogin = location.pathname === '/'
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f1f5f9', fontFamily: 'system-ui, sans-serif' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#f3f3f3', fontFamily: "'Segoe UI', system-ui, sans-serif" }}>
       {!isLogin && <Navbar />}
       <main>{children}</main>
       {!isLogin && <BotoesFlutantes />}

@@ -4,34 +4,34 @@ import { useNavigate } from 'react-router-dom'
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 
 const pageStyle = {
-  padding: '32px',
+  padding: '28px 32px',
   maxWidth: '720px',
   margin: '0 auto',
-  fontFamily: 'system-ui, sans-serif',
+  fontFamily: "'Segoe UI', system-ui, sans-serif",
   paddingBottom: '80px',
 }
 
 const tituloPaginaStyle = {
-  fontSize: '22px',
-  fontWeight: '700',
-  color: '#1e3a5f',
-  margin: '0 0 28px 0',
+  fontSize: '20px',
+  fontWeight: '600',
+  color: '#323130',
+  margin: '0 0 24px 0',
 }
 
 const secaoStyle = (cor) => ({
   backgroundColor: '#ffffff',
-  borderRadius: '10px',
-  boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
-  padding: '28px',
-  marginBottom: '24px',
-  borderTop: `4px solid ${cor}`,
+  border: '1px solid #e5e5e5',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+  padding: '24px',
+  marginBottom: '20px',
+  borderTop: `3px solid ${cor}`,
 })
 
 const secaoTituloStyle = (cor) => ({
-  fontSize: '15px',
-  fontWeight: '700',
+  fontSize: '13px',
+  fontWeight: '600',
   color: cor,
-  margin: '0 0 20px 0',
+  margin: '0 0 16px 0',
   textTransform: 'uppercase',
   letterSpacing: '0.8px',
 })
@@ -39,52 +39,52 @@ const secaoTituloStyle = (cor) => ({
 const gridStyle = {
   display: 'grid',
   gridTemplateColumns: '1fr 1fr',
-  gap: '16px',
+  gap: '14px',
 }
 
 const fieldStyle = {
   display: 'flex',
   flexDirection: 'column',
-  gap: '6px',
+  gap: '4px',
 }
 
 const fieldFullStyle = {
   display: 'flex',
   flexDirection: 'column',
-  gap: '6px',
+  gap: '4px',
   gridColumn: '1 / -1',
 }
 
 const labelStyle = {
-  fontSize: '13px',
+  fontSize: '12px',
   fontWeight: '600',
-  color: '#374151',
+  color: '#323130',
 }
 
 const inputStyle = {
-  padding: '10px 14px',
-  border: '1px solid #d1d5db',
-  borderRadius: '8px',
-  fontSize: '14px',
-  color: '#111827',
-  backgroundColor: '#f9fafb',
+  padding: '8px 12px',
+  border: '1px solid #d1d1d1',
+  borderRadius: '2px',
+  fontSize: '13px',
+  color: '#323130',
+  backgroundColor: '#ffffff',
   outline: 'none',
   width: '100%',
   boxSizing: 'border-box',
+  fontFamily: "'Segoe UI', system-ui, sans-serif",
 }
 
 const inputReadOnlyStyle = {
   ...inputStyle,
-  color: '#64748b',
-  backgroundColor: '#f1f5f9',
+  color: '#605e5c',
+  backgroundColor: '#f3f3f3',
   cursor: 'default',
 }
 
 const textareaStyle = {
   ...inputStyle,
   resize: 'vertical',
-  minHeight: '80px',
-  fontFamily: 'system-ui, sans-serif',
+  minHeight: '72px',
 }
 
 const selectStyle = {
@@ -94,71 +94,59 @@ const selectStyle = {
 
 const acoesStyle = {
   display: 'flex',
-  gap: '12px',
+  gap: '10px',
   justifyContent: 'flex-end',
   marginTop: '8px',
 }
 
 const btnSalvarStyle = {
-  backgroundColor: '#10b981',
+  backgroundColor: '#0078d4',
   color: '#ffffff',
   border: 'none',
-  borderRadius: '8px',
-  padding: '11px 28px',
-  fontSize: '14px',
-  fontWeight: '700',
+  borderRadius: '2px',
+  padding: '9px 24px',
+  fontSize: '13px',
+  fontWeight: '600',
   cursor: 'pointer',
 }
 
 const btnCancelarStyle = {
-  backgroundColor: '#f1f5f9',
-  color: '#475569',
-  border: '1px solid #d1d5db',
-  borderRadius: '8px',
-  padding: '11px 24px',
-  fontSize: '14px',
+  backgroundColor: '#f3f3f3',
+  color: '#323130',
+  border: '1px solid #d1d1d1',
+  borderRadius: '2px',
+  padding: '9px 20px',
+  fontSize: '13px',
   fontWeight: '600',
   cursor: 'pointer',
 }
 
 const sucessoStyle = {
-  backgroundColor: '#d1fae5',
-  border: '1px solid #6ee7b7',
-  borderRadius: '8px',
-  padding: '12px 16px',
-  color: '#065f46',
-  fontSize: '14px',
-  marginBottom: '20px',
-  fontWeight: '500',
+  backgroundColor: '#dff6dd',
+  border: '1px solid #107c10',
+  borderRadius: '2px',
+  padding: '10px 14px',
+  color: '#0e6b0e',
+  fontSize: '13px',
+  marginBottom: '16px',
 }
 
 const erroStyle = {
-  backgroundColor: '#fee2e2',
-  border: '1px solid #fca5a5',
-  borderRadius: '8px',
-  padding: '12px 16px',
-  color: '#b91c1c',
-  fontSize: '14px',
-  marginBottom: '20px',
+  backgroundColor: '#fde7e9',
+  border: '1px solid #d13438',
+  borderRadius: '2px',
+  padding: '10px 14px',
+  color: '#a4262c',
+  fontSize: '13px',
+  marginBottom: '16px',
 }
 
 const VEICULO_INICIAL = {
-  placa: '',
-  modelo: '',
-  cor: '',
-  descricao: '',
-  status: 'iniciado',
-  valor: '',
-  atendente_id: null,
-  mecanico_id: '',
+  placa: '', modelo: '', cor: '', descricao: '',
+  status: 'iniciado', valor: '', atendente_id: null, mecanico_id: '',
 }
 
-const PROPRIETARIO_INICIAL = {
-  cpf: '',
-  nome: '',
-  telefone: '',
-  email: '',
-}
+const PROPRIETARIO_INICIAL = { cpf: '', nome: '', telefone: '', email: '' }
 
 export default function CadastroVeiculos() {
   const navigate = useNavigate()
@@ -183,20 +171,16 @@ export default function CadastroVeiculos() {
 
   const validar = () => {
     const lista = []
-    if (!veiculo.placa.trim()) lista.push('Placa é obrigatória.')
-    if (!veiculo.modelo.trim()) lista.push('Modelo é obrigatório.')
-    if (!proprietario.cpf.trim()) lista.push('CPF é obrigatório.')
-    if (!proprietario.nome.trim()) lista.push('Nome do proprietário é obrigatório.')
+    if (!veiculo.placa.trim()) lista.push('Placa e obrigatoria.')
+    if (!veiculo.modelo.trim()) lista.push('Modelo e obrigatorio.')
+    if (!proprietario.cpf.trim()) lista.push('CPF e obrigatorio.')
+    if (!proprietario.nome.trim()) lista.push('Nome do proprietario e obrigatorio.')
     return lista
   }
 
   const handleSalvar = async () => {
     const lista = validar()
-    if (lista.length > 0) {
-      setErros(lista)
-      setSucesso(false)
-      return
-    }
+    if (lista.length > 0) { setErros(lista); setSucesso(false); return }
     setErros([])
     setLoading(true)
     try {
@@ -206,7 +190,7 @@ export default function CadastroVeiculos() {
         body: JSON.stringify({ veiculo, proprietario }),
       })
       const data = await res.json()
-      if (!res.ok) throw new Error(data.erro || 'Erro ao salvar ordem de serviço.')
+      if (!res.ok) throw new Error(data.erro || 'Erro ao salvar ordem de servico.')
       setSucesso(true)
       setTimeout(() => navigate('/dashboard'), 1800)
     } catch (err) {
@@ -218,23 +202,16 @@ export default function CadastroVeiculos() {
 
   return (
     <div style={pageStyle}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '28px' }}>
-        <h1 style={{ ...tituloPaginaStyle, margin: 0 }}>Nova Ordem de Serviço</h1>
-        <button style={btnCancelarStyle} onClick={() => navigate('/dashboard')}>
-          Voltar ao Dashboard
-        </button>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+        <h1 style={{ ...tituloPaginaStyle, margin: 0 }}>Nova Ordem de Servico</h1>
+        <button style={btnCancelarStyle} onClick={() => navigate('/dashboard')}>Voltar</button>
       </div>
 
-      {sucesso && (
-        <div style={sucessoStyle}>Ordem de serviço cadastrada com sucesso! Redirecionando...</div>
-      )}
-      {erros.length > 0 && (
-        <div style={erroStyle}>{erros.map((e, i) => <div key={i}>{e}</div>)}</div>
-      )}
+      {sucesso && <div style={sucessoStyle}>Ordem de servico cadastrada com sucesso! Redirecionando...</div>}
+      {erros.length > 0 && <div style={erroStyle}>{erros.map((e, i) => <div key={i}>{e}</div>)}</div>}
 
-      {/* VEÍCULO */}
-      <div style={secaoStyle('#3b82f6')}>
-        <p style={secaoTituloStyle('#3b82f6')}>Dados do Veículo</p>
+      <div style={secaoStyle('#0078d4')}>
+        <p style={secaoTituloStyle('#0078d4')}>Dados do Veiculo</p>
         <div style={gridStyle}>
           <div style={fieldStyle}>
             <label style={labelStyle}>Placa *</label>
@@ -265,16 +242,15 @@ export default function CadastroVeiculos() {
               value={veiculo.valor} onChange={(e) => setV('valor', e.target.value)} />
           </div>
           <div style={fieldFullStyle}>
-            <label style={labelStyle}>Descrição do Serviço</label>
-            <textarea style={textareaStyle} placeholder="Descreva o serviço a ser realizado..."
+            <label style={labelStyle}>Descricao do Servico</label>
+            <textarea style={textareaStyle} placeholder="Descreva o servico..."
               value={veiculo.descricao} onChange={(e) => setV('descricao', e.target.value)} />
           </div>
         </div>
       </div>
 
-      {/* PROPRIETÁRIO */}
-      <div style={secaoStyle('#10b981')}>
-        <p style={secaoTituloStyle('#10b981')}>Dados do Proprietário</p>
+      <div style={secaoStyle('#107c10')}>
+        <p style={secaoTituloStyle('#107c10')}>Dados do Proprietario</p>
         <div style={gridStyle}>
           <div style={fieldStyle}>
             <label style={labelStyle}>CPF *</label>
@@ -283,7 +259,7 @@ export default function CadastroVeiculos() {
           </div>
           <div style={fieldStyle}>
             <label style={labelStyle}>Nome Completo *</label>
-            <input style={inputStyle} type="text" placeholder="Nome do proprietário"
+            <input style={inputStyle} type="text" placeholder="Nome do proprietario"
               value={proprietario.nome} onChange={(e) => setP('nome', e.target.value)} />
           </div>
           <div style={fieldStyle}>
@@ -299,19 +275,18 @@ export default function CadastroVeiculos() {
         </div>
       </div>
 
-      {/* RESPONSÁVEIS */}
-      <div style={secaoStyle('#f59e0b')}>
-        <p style={secaoTituloStyle('#f59e0b')}>Responsáveis</p>
+      <div style={secaoStyle('#c8a600')}>
+        <p style={secaoTituloStyle('#c8a600')}>Responsaveis</p>
         <div style={gridStyle}>
           <div style={fieldStyle}>
             <label style={labelStyle}>Atendente</label>
             <input style={inputReadOnlyStyle} type="text" value={user.nome || '—'} readOnly />
           </div>
           <div style={fieldStyle}>
-            <label style={labelStyle}>Mecânico Responsável</label>
+            <label style={labelStyle}>Mecanico Responsavel</label>
             <select style={selectStyle} value={veiculo.mecanico_id}
               onChange={(e) => setV('mecanico_id', e.target.value || null)}>
-              <option value="">— Selecionar mecânico —</option>
+              <option value="">— Selecionar mecanico —</option>
               {mecanicos.map((m) => (
                 <option key={m.id} value={m.id}>{m.nome}</option>
               ))}
@@ -323,7 +298,7 @@ export default function CadastroVeiculos() {
       <div style={acoesStyle}>
         <button style={btnCancelarStyle} onClick={() => navigate('/dashboard')}>Cancelar</button>
         <button style={{ ...btnSalvarStyle, opacity: loading ? 0.7 : 1 }} onClick={handleSalvar} disabled={loading}>
-          {loading ? 'Salvando...' : 'Salvar Ordem de Serviço'}
+          {loading ? 'Salvando...' : 'Salvar Ordem de Servico'}
         </button>
       </div>
     </div>

@@ -12,36 +12,22 @@ const ABA_LABELS = {
 }
 
 const STATUS_CORES = {
-  'em andamento': { bg: '#fef9c3', color: '#a16207', border: '#fde047' },
-  'iniciado': { bg: '#dbeafe', color: '#1d4ed8', border: '#93c5fd' },
-  'finalizado': { bg: '#d1fae5', color: '#065f46', border: '#6ee7b7' },
+  'em andamento': { bg: '#fff4ce', color: '#7d5800', border: '#f9c642' },
+  'iniciado':     { bg: '#cce4f7', color: '#004e8c', border: '#0078d4' },
+  'finalizado':   { bg: '#dff6dd', color: '#0e6b0e', border: '#107c10' },
 }
 
 const pageStyle = {
-  padding: '32px',
+  padding: '28px 32px',
   maxWidth: '960px',
   margin: '0 auto',
-  fontFamily: 'system-ui, sans-serif',
-}
-
-const tituloPaginaStyle = {
-  fontSize: '22px',
-  fontWeight: '700',
-  color: '#1e3a5f',
-  margin: '0 0 24px 0',
-}
-
-const abasContainerStyle = {
-  display: 'flex',
-  borderBottom: '2px solid #e2e8f0',
-  marginBottom: '20px',
-  gap: '0',
+  fontFamily: "'Segoe UI', system-ui, sans-serif",
 }
 
 const detalhesOverlayStyle = {
   position: 'fixed',
   top: 0, left: 0, right: 0, bottom: 0,
-  backgroundColor: 'rgba(0,0,0,0.45)',
+  backgroundColor: 'rgba(0,0,0,0.5)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -50,9 +36,9 @@ const detalhesOverlayStyle = {
 
 const detalhesCardStyle = {
   backgroundColor: '#ffffff',
-  borderRadius: '12px',
-  boxShadow: '0 8px 40px rgba(0,0,0,0.18)',
-  padding: '36px',
+  border: '1px solid #d1d1d1',
+  boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+  padding: '32px',
   width: '100%',
   maxWidth: '480px',
 }
@@ -74,14 +60,8 @@ export default function Dashboard() {
         if (!res.ok) throw new Error('Erro ao buscar ordens.')
         return res.json()
       })
-      .then((data) => {
-        setOrdens(data)
-        setLoading(false)
-      })
-      .catch((err) => {
-        setErro(err.message)
-        setLoading(false)
-      })
+      .then((data) => { setOrdens(data); setLoading(false) })
+      .catch((err) => { setErro(err.message); setLoading(false) })
   }, [])
 
   const filtradas = ordens.filter((os) => {
@@ -95,43 +75,17 @@ export default function Dashboard() {
   })
 
   const abaStyle = (aba) => ({
-    padding: '10px 22px',
+    padding: '8px 20px',
     border: 'none',
     backgroundColor: 'transparent',
-    borderBottom: abaAtiva === aba ? '3px solid #3b82f6' : '3px solid transparent',
-    color: abaAtiva === aba ? '#3b82f6' : '#64748b',
-    fontWeight: abaAtiva === aba ? '700' : '500',
-    fontSize: '14px',
+    borderBottom: abaAtiva === aba ? '2px solid #0078d4' : '2px solid transparent',
+    color: abaAtiva === aba ? '#0078d4' : '#605e5c',
+    fontWeight: abaAtiva === aba ? '600' : '400',
+    fontSize: '13px',
     cursor: 'pointer',
-    marginBottom: '-2px',
-    transition: 'color 0.15s',
-    letterSpacing: '0.2px',
+    marginBottom: '-1px',
+    fontFamily: "'Segoe UI', system-ui, sans-serif",
   })
-
-  const searchStyle = {
-    width: '100%',
-    padding: '10px 16px',
-    border: '1px solid #d1d5db',
-    borderRadius: '8px',
-    fontSize: '14px',
-    color: '#111827',
-    backgroundColor: '#ffffff',
-    boxSizing: 'border-box',
-    marginBottom: '20px',
-    outline: 'none',
-  }
-
-  const cardStyle = {
-    backgroundColor: '#ffffff',
-    borderRadius: '10px',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
-    padding: '20px 24px',
-    marginBottom: '14px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: '16px',
-  }
 
   const statusBadge = (status) => {
     const cor = STATUS_CORES[status] || {}
@@ -139,59 +93,23 @@ export default function Dashboard() {
       backgroundColor: cor.bg,
       color: cor.color,
       border: `1px solid ${cor.border}`,
-      borderRadius: '20px',
-      padding: '3px 12px',
+      borderRadius: '2px',
+      padding: '2px 10px',
       fontSize: '12px',
       fontWeight: '600',
       whiteSpace: 'nowrap',
     }
   }
 
-  const btnEditarStyle = {
-    backgroundColor: '#3b82f6',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '6px',
-    padding: '7px 16px',
-    fontSize: '13px',
-    fontWeight: '600',
-    cursor: 'pointer',
-    marginRight: '8px',
-  }
-
-  const btnDetalhesStyle = {
-    backgroundColor: '#10b981',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '6px',
-    padding: '7px 16px',
-    fontSize: '13px',
-    fontWeight: '600',
-    cursor: 'pointer',
-  }
-
-  const vazioStyle = {
-    textAlign: 'center',
-    padding: '48px 0',
-    color: '#94a3b8',
-    fontSize: '15px',
-  }
-
   return (
     <div style={pageStyle}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
-        <h1 style={{ ...tituloPaginaStyle, margin: 0 }}>Ordens de Servico</h1>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+        <h1 style={{ fontSize: '20px', fontWeight: '600', color: '#323130', margin: 0 }}>Ordens de Servico</h1>
         <button
           style={{
-            backgroundColor: '#10b981',
-            color: '#ffffff',
-            border: 'none',
-            borderRadius: '8px',
-            padding: '10px 22px',
-            fontSize: '14px',
-            fontWeight: '700',
-            cursor: 'pointer',
-            letterSpacing: '0.2px',
+            backgroundColor: '#107c10', color: '#ffffff', border: 'none',
+            borderRadius: '2px', padding: '8px 20px', fontSize: '13px',
+            fontWeight: '600', cursor: 'pointer',
           }}
           onClick={() => navigate('/cadastro-veiculo')}
         >
@@ -200,32 +118,23 @@ export default function Dashboard() {
       </div>
 
       {erro && (
-        <div style={{
-          backgroundColor: '#fee2e2',
-          border: '1px solid #fca5a5',
-          borderRadius: '8px',
-          padding: '12px 16px',
-          color: '#b91c1c',
-          fontSize: '14px',
-          marginBottom: '20px',
-        }}>
+        <div style={{ backgroundColor: '#fde7e9', border: '1px solid #d13438', borderRadius: '2px', padding: '10px 14px', color: '#a4262c', fontSize: '13px', marginBottom: '16px' }}>
           {erro}
         </div>
       )}
 
-      {/* ABAS */}
-      <div style={abasContainerStyle}>
+      <div style={{ display: 'flex', borderBottom: '1px solid #d1d1d1', marginBottom: '16px' }}>
         {ABAS.map((aba) => (
           <button key={aba} style={abaStyle(aba)} onClick={() => setAbaAtiva(aba)}>
             {ABA_LABELS[aba]}
             <span style={{
-              marginLeft: '8px',
-              backgroundColor: abaAtiva === aba ? '#3b82f6' : '#e2e8f0',
-              color: abaAtiva === aba ? '#fff' : '#64748b',
-              borderRadius: '12px',
-              padding: '1px 8px',
-              fontSize: '12px',
-              fontWeight: '700',
+              marginLeft: '6px',
+              backgroundColor: abaAtiva === aba ? '#0078d4' : '#e5e5e5',
+              color: abaAtiva === aba ? '#fff' : '#605e5c',
+              borderRadius: '10px',
+              padding: '0 7px',
+              fontSize: '11px',
+              fontWeight: '600',
             }}>
               {ordens.filter(o => o.status === aba).length}
             </span>
@@ -233,45 +142,59 @@ export default function Dashboard() {
         ))}
       </div>
 
-      {/* BUSCA */}
       <input
-        style={searchStyle}
+        style={{
+          width: '100%', padding: '8px 12px', border: '1px solid #d1d1d1',
+          borderRadius: '2px', fontSize: '13px', color: '#323130',
+          backgroundColor: '#ffffff', boxSizing: 'border-box', marginBottom: '16px', outline: 'none',
+          fontFamily: "'Segoe UI', system-ui, sans-serif",
+        }}
         type="text"
         placeholder="Buscar por placa ou CPF..."
         value={busca}
         onChange={(e) => setBusca(e.target.value)}
       />
 
-      {/* LISTA DE CARDS */}
       {loading ? (
-        <div style={vazioStyle}>Carregando ordens...</div>
+        <div style={{ textAlign: 'center', padding: '48px', color: '#a19f9d' }}>Carregando...</div>
       ) : filtradas.length === 0 ? (
-        <div style={vazioStyle}>Nenhuma ordem encontrada.</div>
+        <div style={{ textAlign: 'center', padding: '48px', color: '#a19f9d' }}>Nenhuma ordem encontrada.</div>
       ) : (
         filtradas.map((os) => (
-          <div key={os.codigo} style={cardStyle}>
+          <div key={os.codigo} style={{
+            backgroundColor: '#ffffff', border: '1px solid #e5e5e5',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+            padding: '16px 20px', marginBottom: '8px',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px',
+          }}>
             <div style={{ flex: 1 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
-                <span style={{ fontWeight: '700', color: '#1e3a5f', fontSize: '15px' }}>{os.codigo}</span>
-                <span style={{ fontWeight: '700', color: '#374151', fontSize: '15px' }}>{os.placa}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
+                <span style={{ fontWeight: '600', color: '#323130', fontSize: '14px' }}>{os.codigo}</span>
+                <span style={{ fontWeight: '600', color: '#323130', fontSize: '14px' }}>{os.placa}</span>
                 <span style={statusBadge(os.status)}>{ABA_LABELS[os.status]}</span>
               </div>
-              <div style={{ fontSize: '13px', color: '#64748b', display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-                <span><strong style={{ color: '#374151' }}>Cliente:</strong> {os.cliente}</span>
-                <span><strong style={{ color: '#374151' }}>CPF:</strong> {os.cpf}</span>
-                <span><strong style={{ color: '#374151' }}>Data:</strong> {os.data}</span>
-                <span><strong style={{ color: '#374151' }}>Valor:</strong>{' '}
-                  <span style={{ color: '#10b981', fontWeight: '700' }}>
+              <div style={{ fontSize: '12px', color: '#605e5c', display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                <span><strong style={{ color: '#323130' }}>Cliente:</strong> {os.cliente}</span>
+                <span><strong style={{ color: '#323130' }}>CPF:</strong> {os.cpf}</span>
+                <span><strong style={{ color: '#323130' }}>Data:</strong> {os.data}</span>
+                <span><strong style={{ color: '#323130' }}>Valor:</strong>{' '}
+                  <span style={{ color: '#107c10', fontWeight: '600' }}>
                     R$ {parseFloat(os.valor).toFixed(2).replace('.', ',')}
                   </span>
                 </span>
               </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-              <button style={btnEditarStyle} onClick={() => navigate(`/editar/${os.codigo}`)}>
+            <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
+              <button style={{
+                backgroundColor: '#0078d4', color: '#fff', border: 'none',
+                borderRadius: '2px', padding: '6px 14px', fontSize: '12px', fontWeight: '600', cursor: 'pointer',
+              }} onClick={() => navigate(`/editar/${os.codigo}`)}>
                 Editar
               </button>
-              <button style={btnDetalhesStyle} onClick={() => setDetalheOS(os)}>
+              <button style={{
+                backgroundColor: '#107c10', color: '#fff', border: 'none',
+                borderRadius: '2px', padding: '6px 14px', fontSize: '12px', fontWeight: '600', cursor: 'pointer',
+              }} onClick={() => setDetalheOS(os)}>
                 Detalhes
               </button>
             </div>
@@ -279,42 +202,38 @@ export default function Dashboard() {
         ))
       )}
 
-      {/* MODAL DETALHES */}
       {detalheOS && (
         <div style={detalhesOverlayStyle} onClick={() => setDetalheOS(null)}>
           <div style={detalhesCardStyle} onClick={(e) => e.stopPropagation()}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h2 style={{ margin: 0, fontSize: '18px', color: '#1e3a5f', fontWeight: '700' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
+              <h2 style={{ margin: 0, fontSize: '16px', color: '#323130', fontWeight: '600' }}>
                 Detalhes — {detalheOS.codigo}
               </h2>
-              <button
-                onClick={() => setDetalheOS(null)}
-                style={{ background: 'none', border: 'none', fontSize: '22px', cursor: 'pointer', color: '#94a3b8', lineHeight: 1 }}
-              >
+              <button onClick={() => setDetalheOS(null)} style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#605e5c', lineHeight: 1 }}>
                 x
               </button>
             </div>
 
-            <div style={{ marginBottom: '16px' }}>
-              <p style={{ fontSize: '12px', fontWeight: '700', color: '#3b82f6', textTransform: 'uppercase', margin: '0 0 10px 0', letterSpacing: '1px' }}>
+            <div style={{ marginBottom: '14px' }}>
+              <p style={{ fontSize: '11px', fontWeight: '600', color: '#0078d4', textTransform: 'uppercase', margin: '0 0 8px 0', letterSpacing: '1px' }}>
                 Veiculo
               </p>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px 16px', fontSize: '14px', color: '#374151' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px 16px', fontSize: '13px', color: '#323130' }}>
                 <span><strong>Placa:</strong> {detalheOS.placa}</span>
                 <span><strong>Modelo:</strong> {detalheOS.modelo}</span>
                 <span><strong>Cor:</strong> {detalheOS.cor}</span>
                 <span><strong>Status:</strong> <span style={statusBadge(detalheOS.status)}>{ABA_LABELS[detalheOS.status]}</span></span>
               </div>
-              <p style={{ marginTop: '8px', fontSize: '14px', color: '#374151' }}>
+              <p style={{ marginTop: '6px', fontSize: '13px', color: '#323130' }}>
                 <strong>Descricao:</strong> {detalheOS.descricao}
               </p>
             </div>
 
-            <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '16px', marginBottom: '16px' }}>
-              <p style={{ fontSize: '12px', fontWeight: '700', color: '#10b981', textTransform: 'uppercase', margin: '0 0 10px 0', letterSpacing: '1px' }}>
+            <div style={{ borderTop: '1px solid #e5e5e5', paddingTop: '14px', marginBottom: '14px' }}>
+              <p style={{ fontSize: '11px', fontWeight: '600', color: '#107c10', textTransform: 'uppercase', margin: '0 0 8px 0', letterSpacing: '1px' }}>
                 Proprietario
               </p>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px 16px', fontSize: '14px', color: '#374151' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px 16px', fontSize: '13px', color: '#323130' }}>
                 <span><strong>Nome:</strong> {detalheOS.cliente}</span>
                 <span><strong>CPF:</strong> {detalheOS.cpf}</span>
                 <span><strong>Telefone:</strong> {detalheOS.telefone}</span>
@@ -322,9 +241,9 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: '14px', color: '#64748b' }}>Data: {detalheOS.data}</span>
-              <span style={{ fontSize: '18px', fontWeight: '700', color: '#10b981' }}>
+            <div style={{ borderTop: '1px solid #e5e5e5', paddingTop: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: '13px', color: '#605e5c' }}>Data: {detalheOS.data}</span>
+              <span style={{ fontSize: '16px', fontWeight: '700', color: '#107c10' }}>
                 R$ {parseFloat(detalheOS.valor).toFixed(2).replace('.', ',')}
               </span>
             </div>

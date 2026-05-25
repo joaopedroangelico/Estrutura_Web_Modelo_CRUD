@@ -4,187 +4,93 @@ import { useNavigate, useParams } from 'react-router-dom'
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 
 const pageStyle = {
-  padding: '32px',
+  padding: '28px 32px',
   maxWidth: '720px',
   margin: '0 auto',
-  fontFamily: 'system-ui, sans-serif',
+  fontFamily: "'Segoe UI', system-ui, sans-serif",
   paddingBottom: '80px',
 }
 
-const headerStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  marginBottom: '28px',
-}
-
 const tituloPaginaStyle = {
-  fontSize: '22px',
-  fontWeight: '700',
-  color: '#1e3a5f',
+  fontSize: '20px',
+  fontWeight: '600',
+  color: '#323130',
   margin: 0,
 }
 
 const idBadgeStyle = {
-  backgroundColor: '#dbeafe',
-  color: '#1d4ed8',
-  borderRadius: '8px',
-  padding: '6px 14px',
-  fontSize: '14px',
-  fontWeight: '700',
+  backgroundColor: '#cce4f7',
+  color: '#004e8c',
+  borderRadius: '2px',
+  padding: '4px 12px',
+  fontSize: '13px',
+  fontWeight: '600',
+  border: '1px solid #0078d4',
 }
 
 const secaoStyle = (cor) => ({
   backgroundColor: '#ffffff',
-  borderRadius: '10px',
-  boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
-  padding: '28px',
-  marginBottom: '24px',
-  borderTop: `4px solid ${cor}`,
+  border: '1px solid #e5e5e5',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+  padding: '24px',
+  marginBottom: '20px',
+  borderTop: `3px solid ${cor}`,
 })
 
 const secaoTituloStyle = (cor) => ({
-  fontSize: '15px',
-  fontWeight: '700',
+  fontSize: '13px',
+  fontWeight: '600',
   color: cor,
-  margin: '0 0 20px 0',
+  margin: '0 0 16px 0',
   textTransform: 'uppercase',
   letterSpacing: '0.8px',
 })
 
-const gridStyle = {
-  display: 'grid',
-  gridTemplateColumns: '1fr 1fr',
-  gap: '16px',
-}
-
-const fieldStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '6px',
-}
-
-const fieldFullStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '6px',
-  gridColumn: '1 / -1',
-}
-
-const labelStyle = {
-  fontSize: '13px',
-  fontWeight: '600',
-  color: '#374151',
-}
+const gridStyle = { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }
+const fieldStyle = { display: 'flex', flexDirection: 'column', gap: '4px' }
+const fieldFullStyle = { display: 'flex', flexDirection: 'column', gap: '4px', gridColumn: '1 / -1' }
+const labelStyle = { fontSize: '12px', fontWeight: '600', color: '#323130' }
 
 const inputStyle = {
-  padding: '10px 14px',
-  border: '1px solid #d1d5db',
-  borderRadius: '8px',
-  fontSize: '14px',
-  color: '#111827',
-  backgroundColor: '#f9fafb',
-  outline: 'none',
-  width: '100%',
-  boxSizing: 'border-box',
+  padding: '8px 12px', border: '1px solid #d1d1d1', borderRadius: '2px',
+  fontSize: '13px', color: '#323130', backgroundColor: '#ffffff',
+  outline: 'none', width: '100%', boxSizing: 'border-box',
+  fontFamily: "'Segoe UI', system-ui, sans-serif",
 }
 
-const inputDisabledStyle = {
-  ...inputStyle,
-  color: '#64748b',
-  backgroundColor: '#f1f5f9',
-  cursor: 'not-allowed',
-}
-
-const textareaStyle = {
-  ...inputStyle,
-  resize: 'vertical',
-  minHeight: '80px',
-  fontFamily: 'system-ui, sans-serif',
-}
-
-const selectStyle = {
-  ...inputStyle,
-  cursor: 'pointer',
-}
-
-const acoesStyle = {
-  display: 'flex',
-  gap: '12px',
-  justifyContent: 'flex-end',
-  marginTop: '8px',
-}
+const inputDisabledStyle = { ...inputStyle, color: '#605e5c', backgroundColor: '#f3f3f3', cursor: 'not-allowed' }
+const textareaStyle = { ...inputStyle, resize: 'vertical', minHeight: '72px' }
+const selectStyle = { ...inputStyle, cursor: 'pointer' }
+const acoesStyle = { display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '8px' }
 
 const btnSalvarStyle = {
-  backgroundColor: '#3b82f6',
-  color: '#ffffff',
-  border: 'none',
-  borderRadius: '8px',
-  padding: '11px 28px',
-  fontSize: '14px',
-  fontWeight: '700',
-  cursor: 'pointer',
+  backgroundColor: '#0078d4', color: '#ffffff', border: 'none',
+  borderRadius: '2px', padding: '9px 24px', fontSize: '13px', fontWeight: '600', cursor: 'pointer',
 }
 
 const btnExcluirStyle = {
-  backgroundColor: '#ef4444',
-  color: '#ffffff',
-  border: 'none',
-  borderRadius: '8px',
-  padding: '11px 20px',
-  fontSize: '14px',
-  fontWeight: '700',
-  cursor: 'pointer',
+  backgroundColor: '#d13438', color: '#ffffff', border: 'none',
+  borderRadius: '2px', padding: '9px 18px', fontSize: '13px', fontWeight: '600', cursor: 'pointer',
 }
 
 const btnCancelarStyle = {
-  backgroundColor: '#f1f5f9',
-  color: '#475569',
-  border: '1px solid #d1d5db',
-  borderRadius: '8px',
-  padding: '11px 24px',
-  fontSize: '14px',
-  fontWeight: '600',
-  cursor: 'pointer',
+  backgroundColor: '#f3f3f3', color: '#323130', border: '1px solid #d1d1d1',
+  borderRadius: '2px', padding: '9px 20px', fontSize: '13px', fontWeight: '600', cursor: 'pointer',
 }
 
 const alertaStyle = {
-  backgroundColor: '#fee2e2',
-  border: '1px solid #fca5a5',
-  borderRadius: '8px',
-  padding: '12px 16px',
-  color: '#b91c1c',
-  fontSize: '14px',
-  marginBottom: '20px',
+  backgroundColor: '#fde7e9', border: '1px solid #d13438', borderRadius: '2px',
+  padding: '10px 14px', color: '#a4262c', fontSize: '13px', marginBottom: '16px',
 }
 
 const sucessoStyle = {
-  backgroundColor: '#d1fae5',
-  border: '1px solid #6ee7b7',
-  borderRadius: '8px',
-  padding: '12px 16px',
-  color: '#065f46',
-  fontSize: '14px',
-  marginBottom: '20px',
-  fontWeight: '500',
+  backgroundColor: '#dff6dd', border: '1px solid #107c10', borderRadius: '2px',
+  padding: '10px 14px', color: '#0e6b0e', fontSize: '13px', marginBottom: '16px',
 }
 
 const adminBadgeStyle = {
-  backgroundColor: '#fef3c7',
-  border: '1px solid #fcd34d',
-  borderRadius: '6px',
-  padding: '4px 10px',
-  color: '#92400e',
-  fontSize: '12px',
-  fontWeight: '600',
-  marginLeft: '8px',
-}
-
-const naoEncontradoStyle = {
-  textAlign: 'center',
-  padding: '64px 0',
-  color: '#94a3b8',
-  fontSize: '16px',
+  backgroundColor: '#fff4ce', border: '1px solid #f9c642', borderRadius: '2px',
+  padding: '3px 10px', color: '#7d5800', fontSize: '12px', fontWeight: '600', marginLeft: '10px',
 }
 
 export default function EditarVeiculo() {
@@ -211,26 +117,14 @@ export default function EditarVeiculo() {
   useEffect(() => {
     setLoading(true)
     fetch(`${API_URL}/ordens/${id}`)
-      .then((res) => {
-        if (!res.ok) throw new Error('Não encontrada.')
-        return res.json()
-      })
+      .then((res) => { if (!res.ok) throw new Error('Nao encontrada.'); return res.json() })
       .then((data) => {
         setForm({
-          id: data.codigo,
-          placa: data.placa,
-          modelo: data.modelo,
-          cor: data.cor,
-          descricao: data.descricao || '',
-          status: data.status,
-          valor: data.valor,
-          cpf: data.cpf,
-          nome: data.cliente,
-          telefone: data.telefone || '',
-          email: data.email || '',
-          data: data.data,
-          atendente_id: data.atendente_id || null,
-          mecanico_id: data.mecanico_id || '',
+          id: data.codigo, placa: data.placa, modelo: data.modelo, cor: data.cor,
+          descricao: data.descricao || '', status: data.status, valor: data.valor,
+          cpf: data.cpf, nome: data.cliente, telefone: data.telefone || '',
+          email: data.email || '', data: data.data,
+          atendente_id: data.atendente_id || null, mecanico_id: data.mecanico_id || '',
           atendente: data.atendente || '—',
         })
         setLoading(false)
@@ -242,20 +136,16 @@ export default function EditarVeiculo() {
 
   const validar = () => {
     const lista = []
-    if (!form.placa.trim()) lista.push('Placa é obrigatória.')
-    if (!form.modelo.trim()) lista.push('Modelo é obrigatório.')
-    if (!form.cpf.trim()) lista.push('CPF é obrigatório.')
-    if (!form.nome.trim()) lista.push('Nome do proprietário é obrigatório.')
+    if (!form.placa.trim()) lista.push('Placa e obrigatoria.')
+    if (!form.modelo.trim()) lista.push('Modelo e obrigatorio.')
+    if (!form.cpf.trim()) lista.push('CPF e obrigatorio.')
+    if (!form.nome.trim()) lista.push('Nome do proprietario e obrigatorio.')
     return lista
   }
 
   const handleSalvar = async () => {
     const lista = validar()
-    if (lista.length > 0) {
-      setErros(lista)
-      setSucesso(false)
-      return
-    }
+    if (lista.length > 0) { setErros(lista); setSucesso(false); return }
     setErros([])
     setSalvando(true)
     try {
@@ -263,22 +153,8 @@ export default function EditarVeiculo() {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          veiculo: {
-            placa: form.placa,
-            modelo: form.modelo,
-            cor: form.cor,
-            descricao: form.descricao,
-            status: form.status,
-            valor: form.valor,
-            atendente_id: form.atendente_id || null,
-            mecanico_id: form.mecanico_id || null,
-          },
-          proprietario: {
-            cpf: form.cpf,
-            nome: form.nome,
-            telefone: form.telefone,
-            email: form.email,
-          },
+          veiculo: { placa: form.placa, modelo: form.modelo, cor: form.cor, descricao: form.descricao, status: form.status, valor: form.valor, atendente_id: form.atendente_id || null, mecanico_id: form.mecanico_id || null },
+          proprietario: { cpf: form.cpf, nome: form.nome, telefone: form.telefone, email: form.email },
         }),
       })
       const data = await res.json()
@@ -293,10 +169,7 @@ export default function EditarVeiculo() {
   }
 
   const handleExcluir = async () => {
-    if (!confirmarExclusao) {
-      setConfirmarExclusao(true)
-      return
-    }
+    if (!confirmarExclusao) { setConfirmarExclusao(true); return }
     try {
       const res = await fetch(`${API_URL}/ordens/${id}`, { method: 'DELETE' })
       const data = await res.json()
@@ -308,54 +181,41 @@ export default function EditarVeiculo() {
     }
   }
 
-  if (loading) {
-    return <div style={pageStyle}><div style={naoEncontradoStyle}>Carregando...</div></div>
-  }
-
-  if (!form) {
-    return (
-      <div style={pageStyle}>
-        <div style={naoEncontradoStyle}>Ordem de serviço "{id}" não encontrada.</div>
-      </div>
-    )
-  }
+  if (loading) return <div style={pageStyle}><div style={{ textAlign: 'center', padding: '64px', color: '#a19f9d' }}>Carregando...</div></div>
+  if (!form) return <div style={pageStyle}><div style={{ textAlign: 'center', padding: '64px', color: '#a19f9d' }}>Ordem "{id}" nao encontrada.</div></div>
 
   return (
     <div style={pageStyle}>
-      <div style={headerStyle}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <h1 style={tituloPaginaStyle}>Editar Ordem de Serviço</h1>
-          {!isAdmin && <span style={adminBadgeStyle}>Valor bloqueado — apenas admin</span>}
+          <h1 style={tituloPaginaStyle}>Editar Ordem de Servico</h1>
+          {!isAdmin && <span style={adminBadgeStyle}>Valor bloqueado</span>}
         </div>
         <span style={idBadgeStyle}>{form.id}</span>
       </div>
 
-      {sucesso && <div style={sucessoStyle}>Ordem de serviço atualizada com sucesso! Redirecionando...</div>}
+      {sucesso && <div style={sucessoStyle}>Ordem atualizada com sucesso! Redirecionando...</div>}
       {erros.length > 0 && <div style={alertaStyle}>{erros.map((e, i) => <div key={i}>{e}</div>)}</div>}
       {confirmarExclusao && (
         <div style={alertaStyle}>
-          <strong>Atenção:</strong> Esta ação não pode ser desfeita. Clique em "Excluir" novamente para confirmar.
+          <strong>Atencao:</strong> Esta acao nao pode ser desfeita. Clique em "Excluir" novamente para confirmar.
         </div>
       )}
 
-      {/* VEÍCULO */}
-      <div style={secaoStyle('#3b82f6')}>
-        <p style={secaoTituloStyle('#3b82f6')}>Dados do Veículo</p>
+      <div style={secaoStyle('#0078d4')}>
+        <p style={secaoTituloStyle('#0078d4')}>Dados do Veiculo</p>
         <div style={gridStyle}>
           <div style={fieldStyle}>
             <label style={labelStyle}>Placa *</label>
-            <input style={inputStyle} type="text"
-              value={form.placa} onChange={(e) => setF('placa', e.target.value.toUpperCase())} maxLength={8} />
+            <input style={inputStyle} type="text" value={form.placa} onChange={(e) => setF('placa', e.target.value.toUpperCase())} maxLength={8} />
           </div>
           <div style={fieldStyle}>
             <label style={labelStyle}>Modelo</label>
-            <input style={inputStyle} type="text"
-              value={form.modelo} onChange={(e) => setF('modelo', e.target.value)} />
+            <input style={inputStyle} type="text" value={form.modelo} onChange={(e) => setF('modelo', e.target.value)} />
           </div>
           <div style={fieldStyle}>
             <label style={labelStyle}>Cor</label>
-            <input style={inputStyle} type="text"
-              value={form.cor} onChange={(e) => setF('cor', e.target.value)} />
+            <input style={inputStyle} type="text" value={form.cor} onChange={(e) => setF('cor', e.target.value)} />
           </div>
           <div style={fieldStyle}>
             <label style={labelStyle}>Status</label>
@@ -367,69 +227,54 @@ export default function EditarVeiculo() {
           </div>
           <div style={fieldStyle}>
             <label style={labelStyle}>Valor (R$)</label>
-            <input
-              style={isAdmin ? inputStyle : inputDisabledStyle}
-              type="number" min="0" step="0.01"
-              value={form.valor}
-              onChange={(e) => isAdmin && setF('valor', e.target.value)}
-              disabled={!isAdmin}
-            />
+            <input style={isAdmin ? inputStyle : inputDisabledStyle} type="number" min="0" step="0.01"
+              value={form.valor} onChange={(e) => isAdmin && setF('valor', e.target.value)} disabled={!isAdmin} />
           </div>
           <div style={fieldStyle}>
             <label style={labelStyle}>Data de Abertura</label>
             <input style={inputDisabledStyle} type="text" value={form.data} disabled />
           </div>
           <div style={fieldFullStyle}>
-            <label style={labelStyle}>Descrição do Serviço</label>
-            <textarea style={textareaStyle}
-              value={form.descricao} onChange={(e) => setF('descricao', e.target.value)} />
+            <label style={labelStyle}>Descricao do Servico</label>
+            <textarea style={textareaStyle} value={form.descricao} onChange={(e) => setF('descricao', e.target.value)} />
           </div>
         </div>
       </div>
 
-      {/* PROPRIETÁRIO */}
-      <div style={secaoStyle('#10b981')}>
-        <p style={secaoTituloStyle('#10b981')}>Dados do Proprietário</p>
+      <div style={secaoStyle('#107c10')}>
+        <p style={secaoTituloStyle('#107c10')}>Dados do Proprietario</p>
         <div style={gridStyle}>
           <div style={fieldStyle}>
             <label style={labelStyle}>CPF *</label>
-            <input style={inputStyle} type="text"
-              value={form.cpf} onChange={(e) => setF('cpf', e.target.value)} maxLength={14} />
+            <input style={inputStyle} type="text" value={form.cpf} onChange={(e) => setF('cpf', e.target.value)} maxLength={14} />
           </div>
           <div style={fieldStyle}>
             <label style={labelStyle}>Nome Completo *</label>
-            <input style={inputStyle} type="text"
-              value={form.nome} onChange={(e) => setF('nome', e.target.value)} />
+            <input style={inputStyle} type="text" value={form.nome} onChange={(e) => setF('nome', e.target.value)} />
           </div>
           <div style={fieldStyle}>
             <label style={labelStyle}>Telefone</label>
-            <input style={inputStyle} type="text"
-              value={form.telefone} onChange={(e) => setF('telefone', e.target.value)} maxLength={15} />
+            <input style={inputStyle} type="text" value={form.telefone} onChange={(e) => setF('telefone', e.target.value)} maxLength={15} />
           </div>
           <div style={fieldStyle}>
             <label style={labelStyle}>E-mail</label>
-            <input style={inputStyle} type="email"
-              value={form.email} onChange={(e) => setF('email', e.target.value)} />
+            <input style={inputStyle} type="email" value={form.email} onChange={(e) => setF('email', e.target.value)} />
           </div>
         </div>
       </div>
 
-      {/* RESPONSÁVEIS */}
-      <div style={secaoStyle('#f59e0b')}>
-        <p style={secaoTituloStyle('#f59e0b')}>Responsáveis</p>
+      <div style={secaoStyle('#c8a600')}>
+        <p style={secaoTituloStyle('#c8a600')}>Responsaveis</p>
         <div style={gridStyle}>
           <div style={fieldStyle}>
             <label style={labelStyle}>Atendente</label>
             <input style={inputDisabledStyle} type="text" value={form.atendente} disabled />
           </div>
           <div style={fieldStyle}>
-            <label style={labelStyle}>Mecânico Responsável</label>
-            <select style={selectStyle} value={form.mecanico_id || ''}
-              onChange={(e) => setF('mecanico_id', e.target.value || null)}>
-              <option value="">— Selecionar mecânico —</option>
-              {mecanicos.map((m) => (
-                <option key={m.id} value={m.id}>{m.nome}</option>
-              ))}
+            <label style={labelStyle}>Mecanico Responsavel</label>
+            <select style={selectStyle} value={form.mecanico_id || ''} onChange={(e) => setF('mecanico_id', e.target.value || null)}>
+              <option value="">— Selecionar mecanico —</option>
+              {mecanicos.map((m) => <option key={m.id} value={m.id}>{m.nome}</option>)}
             </select>
           </div>
         </div>
@@ -438,12 +283,12 @@ export default function EditarVeiculo() {
       <div style={acoesStyle}>
         {isAdmin && (
           <button style={btnExcluirStyle} onClick={handleExcluir}>
-            {confirmarExclusao ? 'Confirmar Exclusão' : 'Excluir OS'}
+            {confirmarExclusao ? 'Confirmar Exclusao' : 'Excluir OS'}
           </button>
         )}
         <button style={btnCancelarStyle} onClick={() => navigate('/dashboard')}>Cancelar</button>
         <button style={{ ...btnSalvarStyle, opacity: salvando ? 0.7 : 1 }} onClick={handleSalvar} disabled={salvando}>
-          {salvando ? 'Salvando...' : 'Salvar Alterações'}
+          {salvando ? 'Salvando...' : 'Salvar Alteracoes'}
         </button>
       </div>
     </div>

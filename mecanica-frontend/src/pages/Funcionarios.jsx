@@ -5,23 +5,23 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 const FUNCOES = ['atendente', 'mecanico', 'gerente', 'outro']
 
 const pageStyle = {
-  padding: '32px',
+  padding: '28px 32px',
   maxWidth: '960px',
   margin: '0 auto',
-  fontFamily: 'system-ui, sans-serif',
+  fontFamily: "'Segoe UI', system-ui, sans-serif",
   paddingBottom: '100px',
 }
 
 const ROLE_CORES = {
-  admin:       { bg: '#fef3c7', color: '#92400e', border: '#fcd34d' },
-  funcionario: { bg: '#dbeafe', color: '#1d4ed8', border: '#93c5fd' },
+  admin:       { bg: '#fff4ce', color: '#7d5800', border: '#f9c642' },
+  funcionario: { bg: '#cce4f7', color: '#004e8c', border: '#0078d4' },
 }
 
 const FUNCAO_CORES = {
-  atendente: { bg: '#d1fae5', color: '#065f46', border: '#6ee7b7' },
-  mecanico:  { bg: '#ede9fe', color: '#5b21b6', border: '#c4b5fd' },
-  gerente:   { bg: '#fee2e2', color: '#991b1b', border: '#fca5a5' },
-  outro:     { bg: '#f1f5f9', color: '#475569', border: '#cbd5e1' },
+  atendente: { bg: '#dff6dd', color: '#0e6b0e', border: '#107c10' },
+  mecanico:  { bg: '#cce4f7', color: '#004e8c', border: '#0078d4' },
+  gerente:   { bg: '#fde7e9', color: '#a4262c', border: '#d13438' },
+  outro:     { bg: '#f3f3f3', color: '#605e5c', border: '#d1d1d1' },
 }
 
 function Badge({ texto, cores }) {
@@ -31,8 +31,8 @@ function Badge({ texto, cores }) {
       backgroundColor: c.bg,
       color: c.color,
       border: `1px solid ${c.border}`,
-      borderRadius: '20px',
-      padding: '3px 12px',
+      borderRadius: '2px',
+      padding: '2px 10px',
       fontSize: '12px',
       fontWeight: '600',
       whiteSpace: 'nowrap',
@@ -42,21 +42,22 @@ function Badge({ texto, cores }) {
 }
 
 const inputStyle = {
-  padding: '10px 14px',
-  border: '1px solid #d1d5db',
-  borderRadius: '8px',
-  fontSize: '14px',
-  color: '#111827',
-  backgroundColor: '#f9fafb',
+  padding: '8px 12px',
+  border: '1px solid #d1d1d1',
+  borderRadius: '2px',
+  fontSize: '13px',
+  color: '#323130',
+  backgroundColor: '#ffffff',
   outline: 'none',
   width: '100%',
   boxSizing: 'border-box',
+  fontFamily: "'Segoe UI', system-ui, sans-serif",
 }
 
 const labelStyle = {
-  fontSize: '13px',
+  fontSize: '12px',
   fontWeight: '600',
-  color: '#374151',
+  color: '#323130',
   marginBottom: '4px',
   display: 'block',
 }
@@ -70,7 +71,7 @@ export default function Funcionarios() {
   const [funcionarios, setFuncionarios] = useState([])
   const [loading, setLoading] = useState(true)
   const [erro, setErro] = useState('')
-  const [modal, setModal] = useState(null) // null | 'novo' | { ...funcionario }
+  const [modal, setModal] = useState(null)
   const [form, setForm] = useState({ nome: '', usuario: '', senha: '', funcao: 'atendente', role: 'funcionario', cpf: '', telefone: '', endereco: '' })
   const [salvando, setSalvando] = useState(false)
   const [msgModal, setMsgModal] = useState('')
@@ -80,7 +81,7 @@ export default function Funcionarios() {
     fetch(`${API_URL}/funcionarios`)
       .then((r) => r.json())
       .then((data) => { setFuncionarios(data); setLoading(false) })
-      .catch(() => { setErro('Erro ao carregar funcionários.'); setLoading(false) })
+      .catch(() => { setErro('Erro ao carregar funcionarios.'); setLoading(false) })
   }
 
   useEffect(() => { carregar() }, [])
@@ -99,7 +100,7 @@ export default function Funcionarios() {
 
   const handleSalvar = async () => {
     if (!form.nome || !form.usuario || (!form.id && !form.senha) || !form.funcao) {
-      setMsgModal('Preencha todos os campos obrigatórios.')
+      setMsgModal('Preencha todos os campos obrigatorios.')
       return
     }
     setSalvando(true)
@@ -124,7 +125,7 @@ export default function Funcionarios() {
   }
 
   const handleExcluir = async (id) => {
-    if (!window.confirm('Tem certeza que deseja excluir este funcionário?')) return
+    if (!window.confirm('Tem certeza que deseja excluir este funcionario?')) return
     try {
       const res = await fetch(`${API_URL}/funcionarios/${id}`, { method: 'DELETE' })
       const data = await res.json()
@@ -137,58 +138,59 @@ export default function Funcionarios() {
 
   return (
     <div style={pageStyle}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '28px' }}>
-        <h1 style={{ fontSize: '22px', fontWeight: '700', color: '#1e3a5f', margin: 0 }}>Funcionários</h1>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+        <h1 style={{ fontSize: '20px', fontWeight: '600', color: '#323130', margin: 0 }}>Funcionarios</h1>
         {isAdmin && (
           <button onClick={abrirNovo} style={{
-            backgroundColor: '#3b82f6', color: '#fff', border: 'none',
-            borderRadius: '8px', padding: '10px 22px', fontSize: '14px',
-            fontWeight: '700', cursor: 'pointer',
+            backgroundColor: '#107c10', color: '#ffffff', border: 'none',
+            borderRadius: '2px', padding: '8px 20px', fontSize: '13px',
+            fontWeight: '600', cursor: 'pointer',
           }}>
-            + Novo Funcionário
+            + Novo Funcionario
           </button>
         )}
       </div>
 
       {erro && (
-        <div style={{ backgroundColor: '#fee2e2', border: '1px solid #fca5a5', borderRadius: '8px',
-          padding: '12px 16px', color: '#b91c1c', marginBottom: '20px' }}>{erro}</div>
+        <div style={{ backgroundColor: '#fde7e9', border: '1px solid #d13438', borderRadius: '2px',
+          padding: '10px 14px', color: '#a4262c', fontSize: '13px', marginBottom: '16px' }}>{erro}</div>
       )}
 
       {loading ? (
-        <div style={{ textAlign: 'center', padding: '48px', color: '#94a3b8' }}>Carregando...</div>
+        <div style={{ textAlign: 'center', padding: '48px', color: '#a19f9d' }}>Carregando...</div>
       ) : funcionarios.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '48px', color: '#94a3b8' }}>Nenhum funcionário cadastrado.</div>
+        <div style={{ textAlign: 'center', padding: '48px', color: '#a19f9d' }}>Nenhum funcionario cadastrado.</div>
       ) : (
         funcionarios.map((f) => (
           <div key={f.id} style={{
-            backgroundColor: '#fff', borderRadius: '10px', boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
-            padding: '18px 24px', marginBottom: '12px',
+            backgroundColor: '#ffffff', border: '1px solid #e5e5e5',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+            padding: '16px 20px', marginBottom: '8px',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px',
           }}>
             <div style={{ flex: 1 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-                <span style={{ fontWeight: '700', color: '#1e3a5f', fontSize: '15px' }}>{f.nome}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
+                <span style={{ fontWeight: '600', color: '#323130', fontSize: '14px' }}>{f.nome}</span>
                 <Badge texto={f.funcao} cores={FUNCAO_CORES} />
                 <Badge texto={f.role} cores={ROLE_CORES} />
               </div>
-              <div style={{ fontSize: '13px', color: '#64748b', display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
-                <span><strong style={{ color: '#374151' }}>Usuário:</strong> {f.usuario}</span>
-                {f.cpf && <span><strong style={{ color: '#374151' }}>CPF:</strong> {f.cpf}</span>}
-                {f.telefone && <span><strong style={{ color: '#374151' }}>Tel:</strong> {f.telefone}</span>}
-                {f.endereco && <span><strong style={{ color: '#374151' }}>End:</strong> {f.endereco}</span>}
-                <span><strong style={{ color: '#374151' }}>Desde:</strong> {f.criado_em}</span>
+              <div style={{ fontSize: '12px', color: '#605e5c', display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+                <span><strong style={{ color: '#323130' }}>Usuario:</strong> {f.usuario}</span>
+                {f.cpf && <span><strong style={{ color: '#323130' }}>CPF:</strong> {f.cpf}</span>}
+                {f.telefone && <span><strong style={{ color: '#323130' }}>Tel:</strong> {f.telefone}</span>}
+                {f.endereco && <span><strong style={{ color: '#323130' }}>End:</strong> {f.endereco}</span>}
+                <span><strong style={{ color: '#323130' }}>Desde:</strong> {f.criado_em}</span>
               </div>
             </div>
             {isAdmin && (
-              <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+              <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
                 <button onClick={() => abrirEditar(f)} style={{
-                  backgroundColor: '#3b82f6', color: '#fff', border: 'none',
-                  borderRadius: '6px', padding: '7px 16px', fontSize: '13px', fontWeight: '600', cursor: 'pointer',
+                  backgroundColor: '#0078d4', color: '#ffffff', border: 'none',
+                  borderRadius: '2px', padding: '6px 14px', fontSize: '12px', fontWeight: '600', cursor: 'pointer',
                 }}>Editar</button>
                 <button onClick={() => handleExcluir(f.id)} style={{
-                  backgroundColor: '#ef4444', color: '#fff', border: 'none',
-                  borderRadius: '6px', padding: '7px 14px', fontSize: '13px', fontWeight: '600', cursor: 'pointer',
+                  backgroundColor: '#d13438', color: '#ffffff', border: 'none',
+                  borderRadius: '2px', padding: '6px 14px', fontSize: '12px', fontWeight: '600', cursor: 'pointer',
                 }}>Excluir</button>
               </div>
             )}
@@ -196,47 +198,48 @@ export default function Funcionarios() {
         ))
       )}
 
-      {/* MODAL */}
       {modal && (
         <div style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.45)', display: 'flex',
+          backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex',
           alignItems: 'center', justifyContent: 'center', zIndex: 1000,
         }} onClick={() => setModal(null)}>
           <div style={{
-            backgroundColor: '#fff', borderRadius: '12px', padding: '36px',
-            width: '100%', maxWidth: '460px', boxShadow: '0 8px 40px rgba(0,0,0,0.18)',
+            backgroundColor: '#ffffff', border: '1px solid #d1d1d1',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+            padding: '32px', width: '100%', maxWidth: '460px',
           }} onClick={(e) => e.stopPropagation()}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-              <h2 style={{ margin: 0, fontSize: '18px', fontWeight: '700', color: '#1e3a5f' }}>
-                {modal === 'novo' ? 'Novo Funcionário' : 'Editar Funcionário'}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h2 style={{ margin: 0, fontSize: '16px', fontWeight: '600', color: '#323130' }}>
+                {modal === 'novo' ? 'Novo Funcionario' : 'Editar Funcionario'}
               </h2>
               <button onClick={() => setModal(null)} style={{
-                background: 'none', border: 'none', fontSize: '22px', cursor: 'pointer', color: '#94a3b8',
-              }}>×</button>
+                background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#605e5c', lineHeight: 1,
+              }}>x</button>
             </div>
 
             {msgModal && (
               <div style={{
-                backgroundColor: '#fee2e2', border: '1px solid #fca5a5', borderRadius: '8px',
-                padding: '12px 16px', color: '#b91c1c', fontSize: '13px', marginBottom: '16px',
+                backgroundColor: '#fde7e9', border: '1px solid #d13438', borderRadius: '2px',
+                padding: '10px 14px', color: '#a4262c', fontSize: '13px', marginBottom: '16px',
                 display: 'flex', flexDirection: 'column', gap: '4px',
               }}>
-                <span style={{ fontWeight: '700' }}>Não foi possível salvar</span>
+                <span style={{ fontWeight: '700' }}>Nao foi possivel salvar</span>
                 <span>{msgModal}</span>
               </div>
             )}
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
               <div style={{ gridColumn: '1 / -1' }}>
                 <label style={labelStyle}>Nome Completo *</label>
                 <input style={inputStyle} value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} />
               </div>
               <div>
-                <label style={labelStyle}>Usuário *</label>
+                <label style={labelStyle}>Usuario *</label>
                 <input style={inputStyle} value={form.usuario}
                   onChange={(e) => setForm({ ...form, usuario: e.target.value })}
-                  disabled={modal === 'editar'} />
+                  disabled={modal === 'editar'}
+                  style={modal === 'editar' ? { ...inputStyle, color: '#605e5c', backgroundColor: '#f3f3f3', cursor: 'not-allowed' } : inputStyle} />
               </div>
               <div>
                 <label style={labelStyle}>{modal === 'editar' ? 'Nova Senha (opcional)' : 'Senha *'}</label>
@@ -255,22 +258,22 @@ export default function Funcionarios() {
                   onChange={(e) => setForm({ ...form, telefone: e.target.value })} />
               </div>
               <div style={{ gridColumn: '1 / -1' }}>
-                <label style={labelStyle}>Endereço</label>
-                <input style={inputStyle} value={form.endereco} placeholder="Rua, número, bairro, cidade"
+                <label style={labelStyle}>Endereco</label>
+                <input style={inputStyle} value={form.endereco} placeholder="Rua, numero, bairro, cidade"
                   onChange={(e) => setForm({ ...form, endereco: e.target.value })} />
               </div>
               <div>
-                <label style={labelStyle}>Função *</label>
+                <label style={labelStyle}>Funcao *</label>
                 <select style={selectStyle} value={form.funcao}
                   onChange={(e) => setForm({ ...form, funcao: e.target.value })}>
                   {FUNCOES.map((f) => <option key={f} value={f}>{f.charAt(0).toUpperCase() + f.slice(1)}</option>)}
                 </select>
               </div>
               <div>
-                <label style={labelStyle}>Nível de Acesso *</label>
+                <label style={labelStyle}>Nivel de Acesso *</label>
                 <select style={selectStyle} value={form.role}
                   onChange={(e) => setForm({ ...form, role: e.target.value })}>
-                  <option value="funcionario">Funcionário</option>
+                  <option value="funcionario">Funcionario</option>
                   <option value="admin">Administrador</option>
                 </select>
               </div>
@@ -278,12 +281,12 @@ export default function Funcionarios() {
 
             <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '24px' }}>
               <button onClick={() => setModal(null)} style={{
-                backgroundColor: '#f1f5f9', color: '#475569', border: '1px solid #d1d5db',
-                borderRadius: '8px', padding: '10px 20px', fontSize: '14px', fontWeight: '600', cursor: 'pointer',
+                backgroundColor: '#f3f3f3', color: '#323130', border: '1px solid #d1d1d1',
+                borderRadius: '2px', padding: '9px 20px', fontSize: '13px', fontWeight: '600', cursor: 'pointer',
               }}>Cancelar</button>
               <button onClick={handleSalvar} disabled={salvando} style={{
-                backgroundColor: '#3b82f6', color: '#fff', border: 'none',
-                borderRadius: '8px', padding: '10px 24px', fontSize: '14px', fontWeight: '700',
+                backgroundColor: '#0078d4', color: '#ffffff', border: 'none',
+                borderRadius: '2px', padding: '9px 24px', fontSize: '13px', fontWeight: '600',
                 cursor: 'pointer', opacity: salvando ? 0.7 : 1,
               }}>{salvando ? 'Salvando...' : 'Salvar'}</button>
             </div>

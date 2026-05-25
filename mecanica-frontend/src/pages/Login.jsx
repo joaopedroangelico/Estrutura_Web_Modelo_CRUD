@@ -5,37 +5,37 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 
 const pageStyle = {
   minHeight: '100vh',
-  backgroundColor: '#f1f5f9',
+  backgroundColor: '#f3f3f3',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  fontFamily: 'system-ui, sans-serif',
+  fontFamily: "'Segoe UI', system-ui, sans-serif",
 }
 
 const cardStyle = {
   backgroundColor: '#ffffff',
-  borderRadius: '12px',
-  boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
-  padding: '48px 40px',
+  border: '1px solid #d1d1d1',
+  boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+  padding: '40px 36px',
   width: '100%',
-  maxWidth: '400px',
+  maxWidth: '360px',
 }
 
 const headerStyle = {
   textAlign: 'center',
-  marginBottom: '32px',
+  marginBottom: '28px',
 }
 
 const titleStyle = {
-  fontSize: '26px',
-  fontWeight: '700',
-  color: '#1e3a5f',
-  margin: '0 0 6px 0',
+  fontSize: '22px',
+  fontWeight: '600',
+  color: '#323130',
+  margin: '0 0 4px 0',
 }
 
 const subtitleStyle = {
-  fontSize: '14px',
-  color: '#64748b',
+  fontSize: '13px',
+  color: '#605e5c',
   margin: 0,
 }
 
@@ -43,49 +43,47 @@ const labelStyle = {
   display: 'block',
   fontSize: '13px',
   fontWeight: '600',
-  color: '#374151',
-  marginBottom: '6px',
+  color: '#323130',
+  marginBottom: '4px',
 }
 
 const inputStyle = {
   width: '100%',
-  padding: '10px 14px',
-  border: '1px solid #d1d5db',
-  borderRadius: '8px',
+  padding: '8px 12px',
+  border: '1px solid #d1d1d1',
+  borderRadius: '2px',
   fontSize: '14px',
-  color: '#111827',
-  backgroundColor: '#f9fafb',
+  color: '#323130',
+  backgroundColor: '#ffffff',
   boxSizing: 'border-box',
   outline: 'none',
-  transition: 'border 0.15s',
 }
 
 const fieldStyle = {
-  marginBottom: '20px',
+  marginBottom: '16px',
 }
 
 const btnStyle = {
   width: '100%',
-  padding: '12px',
-  backgroundColor: '#3b82f6',
+  padding: '10px',
+  backgroundColor: '#0078d4',
   color: '#ffffff',
   border: 'none',
-  borderRadius: '8px',
-  fontSize: '15px',
-  fontWeight: '700',
+  borderRadius: '2px',
+  fontSize: '14px',
+  fontWeight: '600',
   cursor: 'pointer',
   marginTop: '8px',
-  letterSpacing: '0.3px',
 }
 
 const errorStyle = {
-  backgroundColor: '#fee2e2',
-  border: '1px solid #fca5a5',
-  borderRadius: '8px',
-  padding: '10px 14px',
-  color: '#b91c1c',
+  backgroundColor: '#fde7e9',
+  border: '1px solid #d13438',
+  borderRadius: '2px',
+  padding: '8px 12px',
+  color: '#a4262c',
   fontSize: '13px',
-  marginBottom: '16px',
+  marginBottom: '14px',
 }
 
 export default function Login() {
@@ -130,18 +128,18 @@ export default function Login() {
     <div style={pageStyle}>
       <div style={cardStyle}>
         <div style={headerStyle}>
-          <h1 style={titleStyle}>Oficina Mecânica</h1>
-          <p style={subtitleStyle}>Sistema de Gestão de Serviços</p>
+          <h1 style={titleStyle}>Oficina Mecanica</h1>
+          <p style={subtitleStyle}>Sistema de Gestao de Servicos</p>
         </div>
 
         {erro && <div style={errorStyle}>{erro}</div>}
 
         <div style={fieldStyle}>
-          <label style={labelStyle}>Usuário</label>
+          <label style={labelStyle}>Usuario</label>
           <input
             style={inputStyle}
             type="text"
-            placeholder="Digite seu usuário"
+            placeholder="Digite seu usuario"
             value={usuario}
             onChange={(e) => setUsuario(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -164,8 +162,8 @@ export default function Login() {
           {loading ? 'Entrando...' : 'Entrar'}
         </button>
 
-        <p style={{ textAlign: 'center', fontSize: '12px', color: '#94a3b8', marginTop: '20px', marginBottom: 0 }}>
-          Admin: admin / 1234 &nbsp;|&nbsp; Mecânico: carlos / 1234
+        <p style={{ textAlign: 'center', fontSize: '12px', color: '#a19f9d', marginTop: '16px', marginBottom: 0 }}>
+          Admin: admin / 1234 &nbsp;|&nbsp; Mecanico: carlos / 1234
         </p>
       </div>
     </div>
