@@ -139,7 +139,7 @@ function BotoesFlutantes() {
         Funcionarios
       </button>
       <button
-        style={{ ...btnBase, backgroundColor: isActive('/itens') ? '#0e6b0e' : '#107c10', color: '#fff' }}
+        style={{ ...btnBase, backgroundColor: isActive('/itens') ? '#005a9e' : '#0078d4', color: '#fff' }}
         onClick={() => navigate('/itens')}
       >
         Itens
