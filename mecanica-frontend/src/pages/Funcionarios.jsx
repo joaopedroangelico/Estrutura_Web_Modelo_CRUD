@@ -12,25 +12,12 @@ const pageStyle = {
   paddingBottom: '100px',
 }
 
-const ROLE_CORES = {
-  admin:       { bg: '#fff4ce', color: '#7d5800', border: '#f9c642' },
-  funcionario: { bg: '#cce4f7', color: '#004e8c', border: '#0078d4' },
-}
-
-const FUNCAO_CORES = {
-  atendente: { bg: '#dff6dd', color: '#0e6b0e', border: '#107c10' },
-  mecanico:  { bg: '#cce4f7', color: '#004e8c', border: '#0078d4' },
-  gerente:   { bg: '#fde7e9', color: '#a4262c', border: '#d13438' },
-  outro:     { bg: '#f3f3f3', color: '#605e5c', border: '#d1d1d1' },
-}
-
-function Badge({ texto, cores }) {
-  const c = cores[texto] || cores['outro'] || {}
+function Badge({ texto }) {
   return (
     <span style={{
-      backgroundColor: c.bg,
-      color: c.color,
-      border: `1px solid ${c.border}`,
+      backgroundColor: '#f3f3f3',
+      color: '#605e5c',
+      border: '1px solid #d1d1d1',
       borderRadius: '2px',
       padding: '2px 10px',
       fontSize: '12px',
@@ -171,8 +158,8 @@ export default function Funcionarios() {
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
                 <span style={{ fontWeight: '600', color: '#323130', fontSize: '14px' }}>{f.nome}</span>
-                <Badge texto={f.funcao} cores={FUNCAO_CORES} />
-                <Badge texto={f.role} cores={ROLE_CORES} />
+                <Badge texto={f.funcao} />
+                {f.role === 'admin' && <Badge texto="Admin" />}
               </div>
               <div style={{ fontSize: '12px', color: '#605e5c', display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
                 <span><strong style={{ color: '#323130' }}>Usuario:</strong> {f.usuario}</span>
@@ -273,7 +260,7 @@ export default function Funcionarios() {
                 <label style={labelStyle}>Nivel de Acesso *</label>
                 <select style={selectStyle} value={form.role}
                   onChange={(e) => setForm({ ...form, role: e.target.value })}>
-                  <option value="funcionario">Funcionario</option>
+                  
                   <option value="admin">Administrador</option>
                 </select>
               </div>
