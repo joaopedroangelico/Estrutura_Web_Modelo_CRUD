@@ -14,7 +14,7 @@ app.get('/health', async (req, res) => {
   try {
     await pool.query('SELECT 1')
     res.json({ status: 'ok', banco: 'conectado', timestamp: new Date().toISOString() })
-  } catch (err) {
+  } catch (_err) {
     res.status(503).json({ status: 'erro', banco: 'desconectado', timestamp: new Date().toISOString() })
   }
 })
