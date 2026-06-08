@@ -15,6 +15,13 @@ export default [
     rules: {
       'no-unused-vars': ['warn', { argsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }],
       'no-console': 'off',
+      'indent': ['error', 2],
+      'quotes': ['error', 'single', { avoidEscape: true }],
+      'radix': 'error',
+      'eqeqeq': ['error', 'always'],
+      'no-var': 'error',
+      'prefer-const': 'error',
+      'no-multiple-empty-lines': ['error', { max: 1 }],
     },
   },
   {
