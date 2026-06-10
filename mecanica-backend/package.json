@@ -6,7 +6,12 @@
   "scripts": {
     "start": "node server.js",
     "lint": "eslint .",
-    "test": "jest"
+    "test": "jest --coverage",
+    "sonar": "sonar-scanner"
+  },
+  "jest": {
+    "coverageReporters": ["lcov", "text"],
+    "coverageDirectory": "coverage"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +28,7 @@
     "@eslint/js": "^10.0.1",
     "eslint": "^10.4.1",
     "globals": "^17.6.0",
-    "jest": "^30.3.0"
+    "jest": "^30.3.0",
+    "sonar-scanner": "^3.1.0"
   }
 }
