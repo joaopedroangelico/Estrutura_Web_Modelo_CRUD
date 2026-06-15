@@ -162,9 +162,7 @@ export default function Login() {
           {loading ? 'Entrando...' : 'Entrar'}
         </button>
 
-        <p style={{ textAlign: 'center', fontSize: '12px', color: '#a19f9d', marginTop: '16px', marginBottom: 0 }}>
-          Admin: admin / 1234 &nbsp;|&nbsp; Mecanico: carlos / 1234
-        </p>
+
       </div>
     </div>
   )
